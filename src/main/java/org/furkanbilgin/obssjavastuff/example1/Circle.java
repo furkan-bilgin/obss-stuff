@@ -1,24 +1,20 @@
 package org.furkanbilgin.obssjavastuff.example1;
 
-public class Circle {
+public class Circle extends Shape {
 
     private final int radius;
-    private String color;
 
     public Circle(int radius, String color) {
+        super(color);
         this.radius = radius;
-        this.color = color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public int getRadius() {
         return radius;
     }
 
-    public String getColor() {
-        return color;
+    @Override
+    public void draw() {
+        System.out.printf(Double.toString(Math.PI * Math.pow(Double.valueOf(this.getRadius()), 2)) + "\n");
     }
 }

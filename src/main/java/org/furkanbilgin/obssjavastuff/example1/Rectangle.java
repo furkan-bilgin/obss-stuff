@@ -1,15 +1,14 @@
 package org.furkanbilgin.obssjavastuff.example1;
 
-public class Rectangle {
+public class Rectangle extends Shape {
 
     private final int width;
     private final int height;
-    private String color;
 
     public Rectangle(int width, int height, String color) {
+        super(color);
         this.width = width;
         this.height = height;
-        this.color = color;
     }
 
     public int getWidth() {
@@ -20,11 +19,8 @@ public class Rectangle {
         return height;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
+    @Override
+    public void draw() {
+        System.out.println(Integer.toString(width * height));
     }
 }
