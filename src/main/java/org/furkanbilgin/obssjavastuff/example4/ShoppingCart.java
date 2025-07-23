@@ -10,11 +10,10 @@ public class ShoppingCart {
     }
 
     public double calculateTotalPrice() {
-        double totalDiscount = 0;
+        double totalPrice = 0;
         for (Product product : products) {
-            double discount = product.getPrice() * (1 - product.getCategory().getDiscount());
-            totalDiscount += discount;
+            totalPrice += product.getPrice() * (1 - product.getCategory().getDiscount());
         }
-        return totalDiscount;
+        return totalPrice;
     }
 }
