@@ -6,8 +6,11 @@ public class ReverseArray {
         int[] arrayToReverse = new int[] { 1, 2, 3, 4, 5 };
         int[] reversedArray = new int[arrayToReverse.length];
         for (int i = arrayToReverse.length - 1; i >= 0; i--) {
-            // 5 --> reversedArray[1]
-            // 4 --> reversedArray[2]
+            /*
+             * arrayToReverse[4] --> reversedArray[0]
+             * arrayToReverse[3] --> reversedArray[1]
+             * ...
+             */
             reversedArray[i] = arrayToReverse[arrayToReverse.length - i - 1];
         }
         System.out.printf("Reversed array: ");
