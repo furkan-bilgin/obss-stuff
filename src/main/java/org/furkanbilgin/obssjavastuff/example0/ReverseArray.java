@@ -1,9 +1,9 @@
-package org.furkanbilgin.obssjavastuff.initial;
+package org.furkanbilgin.obssjavastuff.example0;
 
 public class ReverseArray {
 
     public static void main(String[] args) {
-        int[] arrayToReverse = new int[]{1, 2, 3, 4, 5};
+        int[] arrayToReverse = new int[] { 1, 2, 3, 4, 5 };
         int[] reversedArray = new int[arrayToReverse.length];
         for (int i = arrayToReverse.length - 1; i >= 0; i--) {
             // 5 --> reversedArray[1]

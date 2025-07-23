@@ -1,4 +1,4 @@
-package org.furkanbilgin.obssjavastuff.initial;
+package org.furkanbilgin.obssjavastuff.example0;
 
 import java.util.Scanner;
 
