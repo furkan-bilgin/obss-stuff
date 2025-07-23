@@ -20,7 +20,6 @@ public class Main {
                 count++;
             }
         }
-        System.out.println(Integer.toString(count));
         return count;
     }
 }
