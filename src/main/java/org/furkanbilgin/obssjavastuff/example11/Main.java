@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Main {
+
     public static void main(String[] args) {
         var cities = Arrays.asList(
                 new City("Istanbul", 15519267),

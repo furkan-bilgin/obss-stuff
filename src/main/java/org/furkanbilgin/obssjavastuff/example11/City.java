@@ -1,6 +1,7 @@
 package org.furkanbilgin.obssjavastuff.example11;
 
 public class City {
+
     private String cityName;
     private int population;
 
@@ -27,9 +28,9 @@ public class City {
 
     @Override
     public String toString() {
-        return "City{" +
-                "cityName='" + cityName + '\'' +
-                ", population=" + population +
-                '}';
+        return "City{"
+                + "cityName='" + cityName + '\''
+                + ", population=" + population
+                + '}';
     }
 }
