@@ -1,6 +1,7 @@
 package org.furkanbilgin.obssjavastuff.example10;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,11 +18,10 @@ public class Main {
                         }
                     }
                     return true;
-                })
-                .toList();
+                });
 
-        for (var prime : primes) {
-            System.err.println(Integer.toString(prime) + ", ");
-        }
+        System.out.println(primes
+                .map(String::valueOf)
+                .collect(Collectors.joining(", ")));
     }
 }
