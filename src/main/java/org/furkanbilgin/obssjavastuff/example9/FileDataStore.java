@@ -14,6 +14,7 @@ public class FileDataStore implements DataStore {
         try {
             java.io.File file = new java.io.File(storageDir, key);
             try (java.io.FileWriter writer = new java.io.FileWriter(file)) {
+                // now + ttl = expiresAt
                 long expiresAt = java.time.Instant.now().plusSeconds(ttl).toEpochMilli();
                 writer.write(expiresAt + "\n" + value);
             }
@@ -29,8 +30,8 @@ public class FileDataStore implements DataStore {
             return null;
         }
         try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(file))) {
-            String expiresAtLine = reader.readLine();
-            long expiresAt = Long.parseLong(expiresAtLine);
+            long expiresAt = Long.parseLong(reader.readLine());
+            // Remove expired files
             if (expiresAt < java.time.Instant.now().toEpochMilli()) {
                 file.delete();
                 return null;
@@ -40,7 +41,7 @@ public class FileDataStore implements DataStore {
             while ((line = reader.readLine()) != null) {
                 valueBuilder.append(line).append("\n");
             }
-            // Remove last newline if present
+            // Remove last newline
             if (valueBuilder.length() > 0) {
                 valueBuilder.setLength(valueBuilder.length() - 1);
             }
