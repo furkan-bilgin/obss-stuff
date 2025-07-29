@@ -14,8 +14,8 @@ public class OriginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Add attributes to ServletContext
-        request.getServletContext().setAttribute("contextParameter1", 1);
-        request.getServletContext().setAttribute("contextParameter2", 2);
+        getServletContext().setAttribute("contextParameter1", 1);
+        getServletContext().setAttribute("contextParameter2", 2);
         // Forward to target
         request.getRequestDispatcher("/context-state/target").forward(request, response);
     }
