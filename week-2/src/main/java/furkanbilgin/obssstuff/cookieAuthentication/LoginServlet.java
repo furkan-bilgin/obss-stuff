@@ -27,6 +27,7 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    /// Authorization middleware (I guess you could call it a "middleware")
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException {
         try {
