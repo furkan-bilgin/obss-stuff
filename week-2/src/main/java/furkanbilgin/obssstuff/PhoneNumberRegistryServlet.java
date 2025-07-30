@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @WebServlet("/phone-registry")
-public class PhoneNumberRegistryService extends HttpServlet {
+public class PhoneNumberRegistryServlet extends HttpServlet {
     private final ArrayList<PhoneRegistryEntry> phoneEntries = new ArrayList<>();
 
     @Override

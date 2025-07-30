@@ -8,7 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 @WebServlet("/random")
-public class RandomGeneratorService extends HttpServlet {
+public class RandomGeneratorServlet extends HttpServlet {
     private final ArrayList<Integer> generatedNumbers = new ArrayList<>();
     private final Random random = new Random();
 
