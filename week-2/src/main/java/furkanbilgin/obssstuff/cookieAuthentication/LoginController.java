@@ -24,10 +24,7 @@ public class LoginController {
         return instance;
     }
 
-    public void storeLogin(String username, int secret) {
-        userSecrets.put(secret, username);
-    }
-
+    /// Checks if the provided username and password match any user in the system.
     public boolean loginUser(String username, String password) {
         for (User user : users) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
@@ -37,17 +34,20 @@ public class LoginController {
         return false;
     }
 
+    /// Checks if the user is authenticated by verifying the secret cookie.
     public boolean isAuthenticated(HttpServletRequest request) {
         return userSecrets.containsKey(getRequestSecretCookie(request));
     }
 
+    /// Sets a secret cookie for the user after successful login.
     public void setUserSecret(HttpServletResponse response, String username) {
         int secret = random.nextInt();
-        storeLogin(username, secret);
+        userSecrets.put(secret, username);
         response.addCookie(new Cookie("secret", String.valueOf(secret)));
     }
 
-    public int getRequestSecretCookie(HttpServletRequest request) {
+    /// Retrieves the secret cookie from the request and returns its value.
+    private int getRequestSecretCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             throw new IllegalStateException("No cookies found in the request.");
