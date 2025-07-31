@@ -1,4 +1,4 @@
-package furkanbilgin.obssstuff.basicState;
+package furkanbilgin.obssstuff.stateManagement.basicState;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

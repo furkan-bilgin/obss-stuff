@@ -1,4 +1,4 @@
-package furkanbilgin.obssstuff.contextState;
+package furkanbilgin.obssstuff.stateManagement.contextState;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

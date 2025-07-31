@@ -1,4 +1,4 @@
-package furkanbilgin.obssstuff.cookieAuthentication;
+package furkanbilgin.obssstuff.authentication.cookie;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

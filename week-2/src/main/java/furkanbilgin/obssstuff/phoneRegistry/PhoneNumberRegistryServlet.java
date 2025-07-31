@@ -1,6 +1,6 @@
-package furkanbilgin.obssstuff;
+package furkanbilgin.obssstuff.phoneRegistry;
 
-import furkanbilgin.obssstuff.models.PhoneRegistryEntry;
+import furkanbilgin.obssstuff.phoneRegistry.models.PhoneRegistryEntry;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

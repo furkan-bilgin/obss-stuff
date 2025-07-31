@@ -1,4 +1,4 @@
-package furkanbilgin.obssstuff.models;
+package furkanbilgin.obssstuff.phoneRegistry.models;
 
 public class PhoneRegistryEntry {
     private String fullName;

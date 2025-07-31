@@ -1,4 +1,4 @@
-package furkanbilgin.obssstuff.authentication;
+package furkanbilgin.obssstuff.authentication.urlParams;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

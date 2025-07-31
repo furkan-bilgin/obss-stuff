@@ -1,4 +1,4 @@
-package furkanbilgin.obssstuff.cookieAuthentication;
+package furkanbilgin.obssstuff.authentication.cookie;
 
 public class User {
     private final String username;
