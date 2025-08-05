@@ -1,7 +1,9 @@
 package com.furkanbilgin.week3.springmvc.controllers;
 
 import com.furkanbilgin.week3.springmvc.models.UserRegisterForm;
+import com.furkanbilgin.week3.springmvc.repositories.UserRepository;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +16,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private final List<UserRegisterForm> userRegisterForms = new ArrayList<>();
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping(value="/register")
     public String getRegister(Model model) {
@@ -28,8 +35,8 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "register";
         }
-        userRegisterForms.add(form);
-        model.addAttribute("users", userRegisterForms);
+        userRepository.saveUser(form);
+        model.addAttribute("users", userRepository.getAllUsers());
         return "register-success";
     }
 }
