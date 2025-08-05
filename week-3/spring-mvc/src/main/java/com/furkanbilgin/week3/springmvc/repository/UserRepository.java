@@ -1,6 +1,6 @@
-package com.furkanbilgin.week3.springmvc.repositories;
+package com.furkanbilgin.week3.springmvc.repository;
 
-import com.furkanbilgin.week3.springmvc.models.UserRegisterForm;
+import com.furkanbilgin.week3.springmvc.model.UserRegisterForm;
 
 import java.util.List;
 

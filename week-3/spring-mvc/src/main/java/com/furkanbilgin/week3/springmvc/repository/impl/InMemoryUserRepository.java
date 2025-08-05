@@ -1,7 +1,7 @@
-package com.furkanbilgin.week3.springmvc.repositories.impl;
+package com.furkanbilgin.week3.springmvc.repository.impl;
 
-import com.furkanbilgin.week3.springmvc.models.UserRegisterForm;
-import com.furkanbilgin.week3.springmvc.repositories.UserRepository;
+import com.furkanbilgin.week3.springmvc.model.UserRegisterForm;
+import com.furkanbilgin.week3.springmvc.repository.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

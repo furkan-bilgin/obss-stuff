@@ -1,17 +1,13 @@
-package com.furkanbilgin.week3.springmvc.controllers;
+package com.furkanbilgin.week3.springmvc.controller;
 
-import com.furkanbilgin.week3.springmvc.models.UserRegisterForm;
-import com.furkanbilgin.week3.springmvc.repositories.UserRepository;
+import com.furkanbilgin.week3.springmvc.model.UserRegisterForm;
+import com.furkanbilgin.week3.springmvc.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
