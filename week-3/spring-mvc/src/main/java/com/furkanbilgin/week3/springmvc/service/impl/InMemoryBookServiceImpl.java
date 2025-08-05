@@ -1,6 +1,7 @@
 package com.furkanbilgin.week3.springmvc.service.impl;
 
 import com.furkanbilgin.week3.springmvc.component.BookMapper;
+import com.furkanbilgin.week3.springmvc.exception.BookNotFoundException;
 import com.furkanbilgin.week3.springmvc.model.Book;
 import com.furkanbilgin.week3.springmvc.model.dto.BookDTO;
 import com.furkanbilgin.week3.springmvc.service.BookService;
@@ -17,7 +18,7 @@ public class InMemoryBookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Autowired
-    private InMemoryBookServiceImpl(BookMapper bookMapper) {
+    public InMemoryBookServiceImpl(BookMapper bookMapper) {
         this.bookMapper = bookMapper;
     }
 
@@ -29,22 +30,27 @@ public class InMemoryBookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO getBookById(int id) {
+    public BookDTO getBookById(int id) throws BookNotFoundException {
+        if (!bookStore.containsKey(id)) {
+            throw new BookNotFoundException(id);
+        }
         return bookMapper.toBookDTO(bookStore.get(id));
     }
 
     @Override
-    public BookDTO updateBook(int id, BookDTO bookDTO) {
+    public BookDTO updateBook(int id, BookDTO bookDTO) throws BookNotFoundException {
         if (bookStore.containsKey(id)) {
-            bookStore.put(id, bookMapper.toBook(bookDTO, id));
-            return bookDTO;
-        } else {
-            throw new IllegalArgumentException("Book with ID " + id + " does not exist.");
+            throw new BookNotFoundException(id);
         }
+        bookStore.put(id, bookMapper.toBook(bookDTO, id));
+        return bookDTO;
     }
 
     @Override
-    public void deleteBook(int id) {
+    public void deleteBook(int id) throws BookNotFoundException {
+        if (!bookStore.containsKey(id)) {
+            throw new BookNotFoundException(id);
+        }
         bookStore.remove(id);
     }
 

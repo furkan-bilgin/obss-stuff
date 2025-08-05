@@ -1,14 +1,13 @@
 package com.furkanbilgin.week3.springmvc.controller;
 
+import com.furkanbilgin.week3.springmvc.exception.BookNotFoundException;
 import com.furkanbilgin.week3.springmvc.model.dto.BookDTO;
 import com.furkanbilgin.week3.springmvc.service.BookService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,30 +28,23 @@ public class BookController {
 
     @GetMapping
     @RequestMapping("/{id}")
-    public BookDTO getBookById(@PathVariable int id) {
-        try {
-            return bookService.getBookById(id);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+    public BookDTO getBookById(@PathVariable int id) throws BookNotFoundException {
+        return bookService.getBookById(id);
     }
 
     @PostMapping
-    public BookDTO addBook(@ModelAttribute @Valid BookDTO bookDTO) {
+    public BookDTO addBook(@RequestBody @Valid BookDTO bookDTO) {
         return bookService.addBook(bookDTO);
     }
 
     @PutMapping("/{id}")
-    public BookDTO updateBook(@PathVariable int id, @RequestBody @Valid BookDTO bookDTO) {
-        try {
-            return bookService.updateBook(id, bookDTO);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+    public BookDTO updateBook(@PathVariable int id, @RequestBody @Valid BookDTO bookDTO)
+            throws BookNotFoundException {
+        return bookService.updateBook(id, bookDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable int id) {
+    public void deleteBook(@PathVariable int id) throws BookNotFoundException {
         bookService.deleteBook(id);
     }
 }
