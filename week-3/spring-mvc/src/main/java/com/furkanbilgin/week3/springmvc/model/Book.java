@@ -1,6 +1,10 @@
 package com.furkanbilgin.week3.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,5 +18,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Book extends BaseEntity {
     private String title;
-    private String author;
+    private Integer pageCount;
+
+    @ManyToOne(optional = false)
+    @JoinColumn
+    @JsonBackReference
+    private Author author;
 }
