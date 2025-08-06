@@ -22,7 +22,7 @@ public class RequestFilter extends OncePerRequestFilter {
         log.info("Request Method: {}", request.getMethod());
         log.info("Request Headers: {}", request.getHeaderNames());
 
-        filterChain.doFilter(request, response);
         */
+        filterChain.doFilter(request, response);
     }
 }
