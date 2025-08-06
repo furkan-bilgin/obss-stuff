@@ -1,6 +1,7 @@
 package com.furkanbilgin.week3.springmvc.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -22,6 +23,6 @@ public class Book extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn
-    @JsonBackReference
+    @JsonIgnoreProperties("books")
     private Author author;
 }

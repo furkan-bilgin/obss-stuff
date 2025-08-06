@@ -1,5 +1,6 @@
 package com.furkanbilgin.week3.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -23,5 +24,6 @@ public class Author extends BaseEntity {
 
     @OneToMany(mappedBy = "author")
     @JsonManagedReference
+    @JsonIgnoreProperties("author")
     private List<Book> books;
 }
