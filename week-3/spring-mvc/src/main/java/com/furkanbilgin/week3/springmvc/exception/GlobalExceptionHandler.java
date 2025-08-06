@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(BookNotFoundException e) {
-        return ResponseEntity.status(404).body("Book with ID " + e.getBookId() + " not found.");
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(EntityNotFoundException e) {
+        return ResponseEntity.status(404).body(e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

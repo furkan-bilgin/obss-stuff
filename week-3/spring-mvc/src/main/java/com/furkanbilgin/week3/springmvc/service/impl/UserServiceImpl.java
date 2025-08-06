@@ -1,6 +1,7 @@
 package com.furkanbilgin.week3.springmvc.service.impl;
 
 import com.furkanbilgin.week3.springmvc.component.UserMapper;
+import com.furkanbilgin.week3.springmvc.exception.UserNotFoundException;
 import com.furkanbilgin.week3.springmvc.model.dto.UserDTO;
 import com.furkanbilgin.week3.springmvc.repository.UserRepository;
 import com.furkanbilgin.week3.springmvc.service.UserService;
@@ -44,5 +45,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id) {}
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(id);
+        }
+    }
 }

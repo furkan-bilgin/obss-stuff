@@ -4,12 +4,11 @@ import com.furkanbilgin.week3.springmvc.model.dto.UserDTO;
 import com.furkanbilgin.week3.springmvc.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;

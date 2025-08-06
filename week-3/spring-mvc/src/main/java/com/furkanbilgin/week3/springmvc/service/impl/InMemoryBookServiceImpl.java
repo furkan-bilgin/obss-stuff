@@ -32,7 +32,7 @@ public class InMemoryBookServiceImpl implements BookService {
     @Override
     public BookDTO getBookById(int id) throws BookNotFoundException {
         if (!bookStore.containsKey(id)) {
-            throw new BookNotFoundException(id);
+            throw new BookNotFoundException((long) id);
         }
         return bookMapper.toBookDTO(bookStore.get(id));
     }
@@ -40,7 +40,7 @@ public class InMemoryBookServiceImpl implements BookService {
     @Override
     public BookDTO updateBook(int id, BookDTO bookDTO) throws BookNotFoundException {
         if (bookStore.containsKey(id)) {
-            throw new BookNotFoundException(id);
+            throw new BookNotFoundException((long) id);
         }
         bookStore.put(id, bookMapper.toBook(bookDTO, id));
         return bookDTO;
@@ -49,7 +49,7 @@ public class InMemoryBookServiceImpl implements BookService {
     @Override
     public void deleteBook(int id) throws BookNotFoundException {
         if (!bookStore.containsKey(id)) {
-            throw new BookNotFoundException(id);
+            throw new BookNotFoundException((long) id);
         }
         bookStore.remove(id);
     }
