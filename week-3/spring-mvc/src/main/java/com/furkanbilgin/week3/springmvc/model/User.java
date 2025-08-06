@@ -1,9 +1,6 @@
 package com.furkanbilgin.week3.springmvc.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +15,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String surname;
+    @Column private String name;
+
+    @Column private String surname;
+
+    @Column(unique = true)
     private String email;
-    private Integer age;
+
+    @Column private Integer age;
 }
