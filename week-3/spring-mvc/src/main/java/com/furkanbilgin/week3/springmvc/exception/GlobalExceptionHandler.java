@@ -4,6 +4,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -14,6 +17,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception e) {
-        return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        var stringWriter = new StringWriter();
+        var printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        return ResponseEntity.status(404)
+                .body(
+                        "<h1>Something went wrong!</h1>"
+                                + "<h2>Exception Message: "
+                                + e.getMessage()
+                                + "</h2>"
+                                + "<h2>Stack Trace:</h2>"
+                                + "<pre>"
+                                + stringWriter
+                                + "</pre>");
     }
 }
