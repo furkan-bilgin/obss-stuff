@@ -2,24 +2,27 @@ package com.furkanbilgin.week3.springmvc.model;
 
 import jakarta.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class User extends BaseEntity {
+    @Column private String username;
 
-    @Column private String name;
+    @Column private String password;
 
-    @Column private String surname;
-
-    @Column(unique = true)
-    private String email;
-
-    @Column private Integer age;
+    @ManyToMany()
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @Builder.Default
+    private List<Role> roles = new ArrayList<>();
 }

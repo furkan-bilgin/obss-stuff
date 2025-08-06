@@ -13,5 +13,9 @@ public interface UserService {
 
     UserDTO findUserById(Long id);
 
+    UserDTO findUserByUsername(String username);
+
+    void checkAndAddUsers();
+
     void deleteUser(Long id);
 }
