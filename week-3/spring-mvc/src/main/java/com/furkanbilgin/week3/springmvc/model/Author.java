@@ -1,6 +1,6 @@
 package com.furkanbilgin.week3.springmvc.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,16 +10,9 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseEntity {
-
-    @Column private String name;
-
-    @Column private String surname;
-
-    @Column(unique = true)
+@AllArgsConstructor
+public class Author extends BaseEntity {
+    private String name;
     private String email;
-
-    @Column private Integer age;
 }

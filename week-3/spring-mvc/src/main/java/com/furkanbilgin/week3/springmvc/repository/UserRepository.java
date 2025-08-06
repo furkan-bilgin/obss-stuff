@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
+    // not so good
     @Query(
             "UPDATE User u SET u.name = :#{#userDTO.name}, "
                     + "u.surname = :#{#userDTO.surname}, "

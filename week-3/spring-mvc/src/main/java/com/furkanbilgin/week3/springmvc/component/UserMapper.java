@@ -13,11 +13,13 @@ public class UserMapper {
     }
 
     public User toUser(UserDTO userDTO) {
-        return new User(
-                userDTO.getId(),
-                userDTO.getName(),
-                userDTO.getSurname(),
-                userDTO.getEmail(),
-                userDTO.getAge());
+        var user =
+                new User(
+                        userDTO.getName(),
+                        userDTO.getSurname(),
+                        userDTO.getEmail(),
+                        userDTO.getAge());
+        user.setId(userDTO.getId());
+        return user;
     }
 }
