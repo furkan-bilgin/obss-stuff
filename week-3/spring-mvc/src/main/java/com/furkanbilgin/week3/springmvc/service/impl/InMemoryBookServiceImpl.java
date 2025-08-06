@@ -18,7 +18,7 @@ public class InMemoryBookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Autowired
-    public InMemoryBookServiceImpl(BookMapper bookMapper) {
+    InMemoryBookServiceImpl(BookMapper bookMapper) {
         this.bookMapper = bookMapper;
     }
 
