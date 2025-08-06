@@ -1,23 +1,18 @@
 package com.furkanbilgin.week3.springmvc.service;
 
-import com.furkanbilgin.week3.springmvc.exception.BookNotFoundException;
-import com.furkanbilgin.week3.springmvc.model.dto.BookDTO;
-
-import jakarta.validation.Valid;
-
-import org.springframework.validation.annotation.Validated;
+import com.furkanbilgin.week3.springmvc.model.Book;
 
 import java.util.List;
+import java.util.Optional;
 
-@Validated
 public interface BookService {
-    BookDTO addBook(@Valid BookDTO bookDTO);
+    List<Book> getAllBooks();
 
-    BookDTO getBookById(int id) throws BookNotFoundException;
+    Optional<Book> getBookById(Long id);
 
-    BookDTO updateBook(int id, @Valid BookDTO bookDTO) throws BookNotFoundException;
+    Book createBook(Book book);
 
-    void deleteBook(int id) throws BookNotFoundException;
+    Optional<Book> updateBook(Long id, Book book);
 
-    List<BookDTO> getBooks();
+    boolean deleteBook(Long id);
 }

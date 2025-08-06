@@ -1,12 +1,10 @@
 package com.furkanbilgin.week3.springmvc.controller;
 
-import com.furkanbilgin.week3.springmvc.exception.BookNotFoundException;
-import com.furkanbilgin.week3.springmvc.model.dto.BookDTO;
+import com.furkanbilgin.week3.springmvc.model.Book;
 import com.furkanbilgin.week3.springmvc.service.BookService;
 
-import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 public class BookController {
+
     private final BookService bookService;
 
     @Autowired
@@ -22,29 +21,35 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookDTO> getBooks() {
-        return bookService.getBooks();
+    public List<Book> getAllBooks() {
+        return bookService.getAllBooks();
     }
 
-    @GetMapping
-    @RequestMapping("/{id}")
-    public BookDTO getBookById(@PathVariable int id) throws BookNotFoundException {
-        return bookService.getBookById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+        return bookService.getBookById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public BookDTO addBook(@RequestBody @Valid BookDTO bookDTO) {
-        return bookService.addBook(bookDTO);
+    public Book createBook(@RequestBody Book book) {
+        return bookService.createBook(book);
     }
 
     @PutMapping("/{id}")
-    public BookDTO updateBook(@PathVariable int id, @RequestBody @Valid BookDTO bookDTO)
-            throws BookNotFoundException {
-        return bookService.updateBook(id, bookDTO);
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
+        return bookService.updateBook(id, book)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable int id) throws BookNotFoundException {
-        bookService.deleteBook(id);
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        if (bookService.deleteBook(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

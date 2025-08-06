@@ -1,9 +1,18 @@
 package com.furkanbilgin.week3.springmvc.model;
 
-import lombok.Data;
+import jakarta.persistence.Entity;
 
-public @Data class Book {
-    private final int id;
-    private final String title;
-    private final String author;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Book extends BaseEntity {
+    private String title;
+    private String author;
 }
