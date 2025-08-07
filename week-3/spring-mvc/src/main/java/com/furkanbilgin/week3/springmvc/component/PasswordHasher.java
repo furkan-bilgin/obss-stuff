@@ -1,9 +1,12 @@
 package com.furkanbilgin.week3.springmvc.component;
 
+import lombok.Getter;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@Getter
 @Component
 public class PasswordHasher {
     private final PasswordEncoder passwordEncoder;
@@ -19,4 +22,5 @@ public class PasswordHasher {
     public boolean matches(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
+
 }

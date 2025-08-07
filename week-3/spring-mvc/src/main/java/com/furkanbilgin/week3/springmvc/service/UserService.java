@@ -13,7 +13,7 @@ public interface UserService {
 
     UserDTO findUserById(Long id);
 
-    UserDTO findUserByUsername(String username);
+    UserDTO findUserByUsernameAndPassword(String username, String password);
 
     void checkAndAddUsers();
 

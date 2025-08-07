@@ -5,7 +5,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -13,12 +17,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
     @Column private String username;
 
     @Column private String password;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -26,4 +30,9 @@ public class User extends BaseEntity {
     @Builder.Default
     @Column
     private List<Role> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
 }

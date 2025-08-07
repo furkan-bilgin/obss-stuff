@@ -74,8 +74,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findUserByUsername(String username) {
-        return userMapper.toUserDTO(userRepository.findByUsername(username));
+    public UserDTO findUserByUsernameAndPassword(String username, String password) {
+        var user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UserNotFoundException(username);
+        }
+        if (!passwordHasher.matches(password, user.getPassword())) {
+            throw new UserNotFoundException("Invalid password for user: " + username);
+        }
+        return userMapper.toUserDTO(user);
     }
 
     @Override
