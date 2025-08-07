@@ -77,10 +77,17 @@ public class BookServiceImpl implements BookService {
                                         root.join("author").get("name"),
                                         "%" + bookSearchRequest.getAuthorName() + "%"));
                     }
-                    if (bookSearchRequest.getPageCount() != null) {
+                    if (bookSearchRequest.getMinPageCount() != null) {
                         predicates.add(
-                                criteriaBuilder.equal(
-                                        root.get("pageCount"), bookSearchRequest.getPageCount()));
+                                criteriaBuilder.greaterThanOrEqualTo(
+                                        root.get("pageCount"),
+                                        bookSearchRequest.getMinPageCount()));
+                    }
+                    if (bookSearchRequest.getMaxPageCount() != null) {
+                        predicates.add(
+                                criteriaBuilder.lessThanOrEqualTo(
+                                        root.get("pageCount"),
+                                        bookSearchRequest.getMaxPageCount()));
                     }
                     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 });
