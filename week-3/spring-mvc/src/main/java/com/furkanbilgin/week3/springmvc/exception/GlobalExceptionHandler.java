@@ -1,6 +1,7 @@
 package com.furkanbilgin.week3.springmvc.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -30,5 +31,10 @@ public class GlobalExceptionHandler {
                                 + "<pre>"
                                 + stringWriter
                                 + "</pre>");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
+        return ResponseEntity.status(403).body("Access denied: " + e.getMessage());
     }
 }
