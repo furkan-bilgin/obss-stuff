@@ -12,6 +12,6 @@ public class UserMapper {
     }
 
     public User toUser(UserDTO userDTO) {
-        return User.builder().id(userDTO.getId()).username(userDTO.getUsername()).build();
+        return User.builder().username(userDTO.getUsername()).build();
     }
 }

@@ -1,6 +1,7 @@
 package com.furkanbilgin.week3.springmvc.service;
 
 import com.furkanbilgin.week3.springmvc.model.Book;
+import com.furkanbilgin.week3.springmvc.model.BookSearchRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +16,6 @@ public interface BookService {
     Optional<Book> updateBook(Long id, Book book);
 
     boolean deleteBook(Long id);
+
+    List<Book> searchBooks(BookSearchRequest bookSearchRequest);
 }

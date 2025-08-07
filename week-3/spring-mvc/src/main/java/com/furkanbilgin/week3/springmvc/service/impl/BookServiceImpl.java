@@ -1,12 +1,16 @@
 package com.furkanbilgin.week3.springmvc.service.impl;
 
 import com.furkanbilgin.week3.springmvc.model.Book;
+import com.furkanbilgin.week3.springmvc.model.BookSearchRequest;
 import com.furkanbilgin.week3.springmvc.repository.BookRepository;
 import com.furkanbilgin.week3.springmvc.service.BookService;
+
+import jakarta.persistence.criteria.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,5 +58,31 @@ public class BookServiceImpl implements BookService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Book> searchBooks(BookSearchRequest bookSearchRequest) {
+        return bookRepository.findAll(
+                (root, query, criteriaBuilder) -> {
+                    var predicates = new ArrayList<Predicate>();
+                    if (bookSearchRequest.getTitle() != null) {
+                        predicates.add(
+                                criteriaBuilder.like(
+                                        root.get("title"),
+                                        "%" + bookSearchRequest.getTitle() + "%"));
+                    }
+                    if (bookSearchRequest.getAuthorName() != null) {
+                        predicates.add(
+                                criteriaBuilder.like(
+                                        root.join("author").get("name"),
+                                        "%" + bookSearchRequest.getAuthorName() + "%"));
+                    }
+                    if (bookSearchRequest.getPageCount() != null) {
+                        predicates.add(
+                                criteriaBuilder.equal(
+                                        root.get("pageCount"), bookSearchRequest.getPageCount()));
+                    }
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                });
     }
 }
