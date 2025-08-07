@@ -24,10 +24,14 @@ public class BaseEntity {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        onChange();
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+        onChange();
     }
+
+    protected void onChange() {}
 }

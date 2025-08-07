@@ -1,5 +1,6 @@
 package com.furkanbilgin.week3.springmvc.service.impl;
 
+import com.furkanbilgin.week3.springmvc.component.PasswordHasher;
 import com.furkanbilgin.week3.springmvc.component.UserMapper;
 import com.furkanbilgin.week3.springmvc.exception.UserNotFoundException;
 import com.furkanbilgin.week3.springmvc.model.SystemRole;
@@ -21,18 +22,27 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final List<Pair<User, SystemRole>> defaultUsers =
             List.of(
-                    new Pair<>(User.builder().username("admin").build(), SystemRole.ADMIN),
-                    new Pair<>(User.builder().username("user").build(), SystemRole.USER));
+                    new Pair<>(
+                            User.builder().username("admin").password("123456").build(),
+                            SystemRole.ADMIN),
+                    new Pair<>(
+                            User.builder().username("user").password("merhaba").build(),
+                            SystemRole.USER));
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final RoleService roleService;
+    private final PasswordHasher passwordHasher;
 
     @Autowired
     public UserServiceImpl(
-            UserRepository userRepository, UserMapper userMapper, RoleService roleService) {
+            UserRepository userRepository,
+            UserMapper userMapper,
+            RoleService roleService,
+            PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.roleService = roleService;
+        this.passwordHasher = passwordHasher;
     }
 
     @Override
@@ -78,6 +88,7 @@ public class UserServiceImpl implements UserService {
                 continue; // Skip if exists
             }
             user.getRoles().add(roleService.findRoleByName(systemRole.name()));
+            user.setPassword(passwordHasher.hashPassword(user.getPassword()));
             userRepository.save(user);
         }
     }
