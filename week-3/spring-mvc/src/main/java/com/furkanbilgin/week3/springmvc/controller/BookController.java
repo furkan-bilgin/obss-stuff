@@ -2,6 +2,7 @@ package com.furkanbilgin.week3.springmvc.controller;
 
 import com.furkanbilgin.week3.springmvc.model.Book;
 import com.furkanbilgin.week3.springmvc.model.BookSearchRequest;
+import com.furkanbilgin.week3.springmvc.model.dto.BookUpsertDTO;
 import com.furkanbilgin.week3.springmvc.service.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class BookController {
     }
 
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
-        return bookService.createBook(book);
+    public Book createBook(@RequestBody BookUpsertDTO bookUpsertDTO) {
+        return bookService.createBook(bookUpsertDTO);
     }
 
     @PutMapping("/{id}")
@@ -56,7 +57,7 @@ public class BookController {
         }
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<List<Book>> searchBooks(
             @RequestBody BookSearchRequest bookSearchRequest) {
         return ResponseEntity.ok(bookService.searchBooks(bookSearchRequest));

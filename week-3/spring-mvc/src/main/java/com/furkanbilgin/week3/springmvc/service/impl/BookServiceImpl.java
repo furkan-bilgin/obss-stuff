@@ -1,8 +1,12 @@
 package com.furkanbilgin.week3.springmvc.service.impl;
 
+import com.furkanbilgin.week3.springmvc.exception.EntityNotFoundException;
+import com.furkanbilgin.week3.springmvc.model.Author;
 import com.furkanbilgin.week3.springmvc.model.Book;
 import com.furkanbilgin.week3.springmvc.model.BookSearchRequest;
+import com.furkanbilgin.week3.springmvc.model.dto.BookUpsertDTO;
 import com.furkanbilgin.week3.springmvc.repository.BookRepository;
+import com.furkanbilgin.week3.springmvc.service.AuthorService;
 import com.furkanbilgin.week3.springmvc.service.BookService;
 
 import jakarta.persistence.criteria.Predicate;
@@ -18,10 +22,12 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final AuthorService authorService;
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService) {
         this.bookRepository = bookRepository;
+        this.authorService = authorService;
     }
 
     @Override
@@ -35,8 +41,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Book book) {
-        return bookRepository.save(book);
+    public Book createBook(BookUpsertDTO book) {
+        var authorOptional = authorService.getAuthorById(book.getAuthorId());
+        if (authorOptional.isEmpty()) {
+            throw new EntityNotFoundException(book.getAuthorId(), Author.class);
+        }
+        return bookRepository.save(
+                Book.builder()
+                        .title(book.getTitle())
+                        .pageCount(book.getPageCount())
+                        .author(authorOptional.get())
+                        .build());
     }
 
     @Override
