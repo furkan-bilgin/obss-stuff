@@ -1,8 +1,8 @@
 import './App.css';
-import { ShoppingApp } from './lib/ShoppingApp';
+import { UserSelectApp } from './lib/userSelect/UserSelectApp';
 
 function App() {
-  return <ShoppingApp />;
+  return <UserSelectApp />;
 }
 
 export default App;
