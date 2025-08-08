@@ -1,6 +1,5 @@
 package com.furkanbilgin.finalproject.movieportal.service;
 
-import com.furkanbilgin.finalproject.movieportal.dto.CourseDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.RegisterUserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 
@@ -16,6 +15,4 @@ public interface UserService {
     UserDTO updateUser(Long id, UserDTO userDTO);
 
     void deleteUser(Long id);
-
-    List<CourseDTO> getMyCourses(String username);
 }

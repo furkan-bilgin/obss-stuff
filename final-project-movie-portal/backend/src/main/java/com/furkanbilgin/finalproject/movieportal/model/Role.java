@@ -3,18 +3,16 @@ package com.furkanbilgin.finalproject.movieportal.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import org.springframework.security.core.GrantedAuthority;
 
-@EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @Entity
-@Data
 @NoArgsConstructor
+@Getter
 public class Role extends BaseEntity implements GrantedAuthority {
     @Column private String name;
 

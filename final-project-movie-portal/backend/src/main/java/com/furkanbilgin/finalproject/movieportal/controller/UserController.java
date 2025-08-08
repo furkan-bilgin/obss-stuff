@@ -1,14 +1,11 @@
 package com.furkanbilgin.finalproject.movieportal.controller;
 
-import com.furkanbilgin.finalproject.movieportal.dto.CourseDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.RegisterUserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,11 +56,5 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-    }
-
-    @PreAuthorize("hasAuthority('STUDENT')")
-    @GetMapping("/me/courses")
-    public List<CourseDTO> getMyCourses(@AuthenticationPrincipal UserDetails userDetails) {
-        return userService.getMyCourses(userDetails.getUsername());
     }
 }

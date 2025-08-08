@@ -2,13 +2,11 @@ package com.furkanbilgin.finalproject.movieportal.model;
 
 import jakarta.persistence.*;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@Data
 @NoArgsConstructor
 @MappedSuperclass
 @SuperBuilder(toBuilder = true)
