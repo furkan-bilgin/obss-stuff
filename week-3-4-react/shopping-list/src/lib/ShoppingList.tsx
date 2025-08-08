@@ -16,9 +16,9 @@ export function ShoppingList({ basket }: ShoppingListProps) {
     >
       <h2>Shopping List</h2>
       <ul>
-        {Object.entries(basket).map(([category, items]) => (
-          <li key={category}>
-            <h3>{category}</h3>
+        {basket.shoppingCategories.map(({ name, items }) => (
+          <li>
+            <h3>{name}</h3>
             <ol>
               {items.map((item) => (
                 <li>

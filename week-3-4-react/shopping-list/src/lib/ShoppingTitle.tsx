@@ -6,8 +6,8 @@ interface ShoppingTitleProps {
 
 export function ShoppingTitle(props: ShoppingTitleProps) {
   let itemCount = 0;
-  for (const category in props.basket) {
-    itemCount += props.basket[category].length;
+  for (const category of props.basket.shoppingCategories) {
+    itemCount += category.items.length;
   }
   return (
     <div style={{ border: '1px solid white', padding: '1rem' }}>
