@@ -1,12 +1,8 @@
-import './App.css'
-import { IncrementalButtonComponent } from './IncrementalButtonComponent'
+import './App.css';
+import { ShoppingApp } from './lib/ShoppingApp';
 
 function App() {
-  return (
-    <>
-      <IncrementalButtonComponent />
-    </>
-  )
+  return <ShoppingApp />;
 }
 
-export default App
+export default App;

@@ -1,8 +1,9 @@
 package com.furkanbilgin.finalproject.movieportal.service;
 
 import com.furkanbilgin.finalproject.movieportal.dto.CourseDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.RegisterUserDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.UserDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.RegisterUserDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
+
 import java.util.List;
 
 public interface UserService {

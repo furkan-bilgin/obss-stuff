@@ -1,14 +1,15 @@
 package com.furkanbilgin.finalproject.movieportal.service.impl;
 
 import com.furkanbilgin.finalproject.movieportal.dto.CourseDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.RegisterUserDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.UserDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.RegisterUserDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.mapper.CourseMapper;
 import com.furkanbilgin.finalproject.movieportal.mapper.UserMapper;
 import com.furkanbilgin.finalproject.movieportal.model.User;
 import com.furkanbilgin.finalproject.movieportal.repository.CourseRepository;
 import com.furkanbilgin.finalproject.movieportal.repository.UserRepository;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

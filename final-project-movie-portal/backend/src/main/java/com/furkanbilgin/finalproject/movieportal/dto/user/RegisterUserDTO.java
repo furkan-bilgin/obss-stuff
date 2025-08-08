@@ -1,4 +1,4 @@
-package com.furkanbilgin.finalproject.movieportal.dto;
+package com.furkanbilgin.finalproject.movieportal.dto.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

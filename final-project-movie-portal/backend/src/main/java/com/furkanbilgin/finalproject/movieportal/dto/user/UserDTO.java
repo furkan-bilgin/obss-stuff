@@ -1,4 +1,4 @@
-package com.furkanbilgin.finalproject.movieportal.dto;
+package com.furkanbilgin.finalproject.movieportal.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDTO {
+public class UserDTO {
     private Long id;
-    private String title;
-    private String description;
-    private List<Long> studentIds;
+    private String username;
+    private String email;
+    private List<String> roles;
+    private List<Long> courseIds;
 }

@@ -1,10 +1,10 @@
 package com.furkanbilgin.finalproject.movieportal.mapper;
 
-import com.furkanbilgin.finalproject.movieportal.dto.RegisterUserDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.UserDTO;
-import com.furkanbilgin.finalproject.movieportal.model.User;
-import com.furkanbilgin.finalproject.movieportal.model.Role;
+import com.furkanbilgin.finalproject.movieportal.dto.user.RegisterUserDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.model.Course;
+import com.furkanbilgin.finalproject.movieportal.model.Role;
+import com.furkanbilgin.finalproject.movieportal.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;

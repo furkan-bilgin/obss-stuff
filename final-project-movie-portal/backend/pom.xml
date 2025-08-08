@@ -8,11 +8,11 @@
         <version>3.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.furkanbilgin.week3</groupId>
-    <artifactId>student</artifactId>
+    <groupId>com.furkanbilgin.finalproject.movieportal</groupId>
+    <artifactId>movieportal</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>student</name>
-    <description>student</description>
+    <name>movieportal</name>
+    <description>movieportal</description>
     <url/>
     <licenses>
         <license/>

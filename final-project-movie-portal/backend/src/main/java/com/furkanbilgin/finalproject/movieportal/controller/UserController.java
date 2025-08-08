@@ -1,6 +1,9 @@
 package com.furkanbilgin.finalproject.movieportal.controller;
 
-import java.util.List;
+import com.furkanbilgin.finalproject.movieportal.dto.CourseDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.RegisterUserDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
+import com.furkanbilgin.finalproject.movieportal.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.furkanbilgin.finalproject.movieportal.dto.CourseDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.RegisterUserDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.UserDTO;
-import com.furkanbilgin.finalproject.movieportal.service.UserService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -45,6 +45,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id) {
+
         return userService.findUserById(id);
     }
 
@@ -52,7 +53,6 @@ public class UserController {
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         return userService.updateUser(id, userDTO);
-
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
