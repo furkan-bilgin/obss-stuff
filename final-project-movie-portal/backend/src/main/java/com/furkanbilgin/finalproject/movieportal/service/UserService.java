@@ -1,18 +1,22 @@
 package com.furkanbilgin.finalproject.movieportal.service;
 
-import com.furkanbilgin.finalproject.movieportal.dto.user.RegisterUserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
-
+import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
-    UserDTO saveUser(RegisterUserDTO userDTO);
+    UserDTO saveUser(RegisterRequestDTO registerUserDTO);
 
     List<UserDTO> findAllUsers();
 
-    UserDTO findUserById(Long id);
+    Optional<UserDTO> findUserById(Long id);
 
-    UserDTO updateUser(Long id, UserDTO userDTO);
+    Optional<UserDTO> findUserByUsername(String username);
 
-    void deleteUser(Long id);
+    Optional<UserDTO> updateUser(Long id, UserDTO userDTO);
+
+    String updateUserToken(Long id);
+
+    Optional<UserDTO> deleteUser(Long id);
 }

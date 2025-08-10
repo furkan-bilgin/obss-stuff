@@ -1,8 +1,5 @@
 package com.furkanbilgin.finalproject.movieportal.dto.user.comment;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
 
-@Data
-public class UserDeleteCommentDTO {
-    private Long commentId;
-}
+public record UserDeleteCommentDTO(@NotBlank Long commentId) {}

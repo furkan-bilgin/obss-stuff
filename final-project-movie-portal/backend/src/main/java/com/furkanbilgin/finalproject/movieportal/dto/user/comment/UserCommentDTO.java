@@ -1,9 +1,7 @@
 package com.furkanbilgin.finalproject.movieportal.dto.user.comment;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Data
-public class UserCommentDTO {
-    private Long parentCommentId;
-    private String content;
-}
+public record UserCommentDTO(
+    Long parentCommentId, @NotBlank @Size(min = 1, max = 1000) String content) {}

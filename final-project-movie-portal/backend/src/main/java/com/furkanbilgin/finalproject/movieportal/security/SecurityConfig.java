@@ -1,10 +1,8 @@
 package com.furkanbilgin.finalproject.movieportal.security;
 
 import com.furkanbilgin.finalproject.movieportal.config.PasswordHasher;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,40 +13,28 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.List;
-
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
-    private final List<Pair<HttpMethod, String>> allowedPaths =
-            List.of(
-                    // Allow Spring docs
-                    Pair.of(HttpMethod.GET, "/swagger-ui/**"),
-                    Pair.of(HttpMethod.GET, "/v3/api-docs/**"),
-                    // Allow auth
-                    Pair.of(HttpMethod.POST, "/auth/login/*"),
-                    Pair.of(HttpMethod.POST, "/auth/register/"));
+    private static final String[] WHITE_LIST_URLS = {
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/auth/login",
+        "/auth/register"
+    };
 
     @Bean
     public SecurityFilterChain springFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        auth ->
-                                allowedPaths.stream()
-                                        .reduce(
-                                                auth,
-                                                (currentAuth, pair) ->
-                                                        currentAuth
-                                                                .requestMatchers(
-                                                                        pair.getFirst(),
-                                                                        pair.getSecond())
-                                                                .permitAll(),
-                                                (a, b) -> a)
-                                        .anyRequest()
-                                        .authenticated())
-                .build();
+        return http
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(WHITE_LIST_URLS).permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
+                .anyRequest().authenticated()
+            )
+            .build();
     }
 
     @Bean
