@@ -3,10 +3,17 @@ package com.furkanbilgin.finalproject.movieportal.service.impl;
 import com.furkanbilgin.finalproject.movieportal.config.PasswordHasher;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
+import com.furkanbilgin.finalproject.movieportal.model.movie.Movie;
 import com.furkanbilgin.finalproject.movieportal.model.user.User;
+import com.furkanbilgin.finalproject.movieportal.model.user.UserMovieFavorite;
+import com.furkanbilgin.finalproject.movieportal.model.user.UserMovieWatchlist;
+import com.furkanbilgin.finalproject.movieportal.repository.MovieRepository;
+import com.furkanbilgin.finalproject.movieportal.repository.UserMovieFavoriteRepository;
+import com.furkanbilgin.finalproject.movieportal.repository.UserMovieWatchlistRepository;
 import com.furkanbilgin.finalproject.movieportal.repository.UserRepository;
 import com.furkanbilgin.finalproject.movieportal.service.JWTService;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
@@ -21,6 +28,9 @@ public class UserServiceImpl implements UserService {
   private final JWTService jwtService;
   private final Long jwtTtl;
   private final PasswordHasher passwordHasher;
+  private final MovieRepository movieRepository;
+  private final UserMovieFavoriteRepository userMovieFavoriteRepository;
+  private final UserMovieWatchlistRepository userMovieWatchlistRepository;
 
   @Autowired
   public UserServiceImpl(
@@ -28,12 +38,18 @@ public class UserServiceImpl implements UserService {
       ModelMapper modelMapper,
       JWTService jwtService,
       @Value("${application.security.jwt-ttl}") Long jwtTtl,
-      PasswordHasher passwordHasher) {
+      PasswordHasher passwordHasher,
+      MovieRepository movieRepository,
+      UserMovieFavoriteRepository userMovieFavoriteRepository,
+      UserMovieWatchlistRepository userMovieWatchlistRepository) {
     this.userRepository = userRepository;
     this.modelMapper = modelMapper;
     this.jwtService = jwtService;
     this.jwtTtl = jwtTtl;
     this.passwordHasher = passwordHasher;
+    this.movieRepository = movieRepository;
+    this.userMovieFavoriteRepository = userMovieFavoriteRepository;
+    this.userMovieWatchlistRepository = userMovieWatchlistRepository;
   }
 
   public UserDTO saveUser(RegisterRequestDTO registerUserDTO) {
@@ -84,5 +100,80 @@ public class UserServiceImpl implements UserService {
     }
     userRepository.deleteById(id);
     return Optional.of(modelMapper.map(userOpt, UserDTO.class));
+  }
+
+  @Override
+  public void favoriteMovie(Long id, Long movieId, Long score) {
+    var user = findUserByIdOrThrow(id);
+    var movie = findMovieByIdOrThrow(movieId);
+    var existingFavorite = userMovieFavoriteRepository.findByUserAndMovie(user, movie);
+    if (existingFavorite.isPresent()) {
+      // Update existing favorite score
+      var favorite = existingFavorite.get();
+      favorite.setScore(score.intValue());
+      userMovieFavoriteRepository.save(favorite);
+      return;
+    }
+    var favorite = new UserMovieFavorite();
+    favorite.setUser(user);
+    favorite.setMovie(movie);
+    favorite.setScore(score.intValue());
+
+    userMovieFavoriteRepository.save(favorite);
+  }
+
+  @Override
+  public void unfavoriteMovie(Long id, Long movieId) {
+    var user = findUserByIdOrThrow(id);
+    var movie = findMovieByIdOrThrow(movieId);
+    var favorite =
+        userMovieFavoriteRepository
+            .findByUserAndMovie(user, movie)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        "Favorite not found for user " + id + " and movie " + movieId));
+    userMovieFavoriteRepository.delete(favorite);
+  }
+
+  @Override
+  public void addMovieToWatchlist(Long id, Long movieId) {
+    var user = findUserByIdOrThrow(id);
+    var movie = findMovieByIdOrThrow(movieId);
+    var existingWatchlist = userMovieWatchlistRepository.findByUserAndMovie(user, movie);
+    if (existingWatchlist.isPresent()) {
+      return;
+    }
+    var watchlist = new UserMovieWatchlist();
+    watchlist.setUser(user);
+    watchlist.setMovie(movie);
+
+    userMovieWatchlistRepository.save(watchlist);
+  }
+
+  @Override
+  public void removeMovieFromWatchlist(Long id, Long movieId) {
+    var user = findUserByIdOrThrow(id);
+    var movie = findMovieByIdOrThrow(movieId);
+    var watchlist =
+        userMovieWatchlistRepository
+            .findByUserAndMovie(user, movie)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        "Watchlist entry not found for user " + id + " and movie " + movieId));
+    userMovieWatchlistRepository.delete(watchlist);
+  }
+
+  private User findUserByIdOrThrow(Long id) {
+    return userRepository
+        .findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("User not found with id " + id));
+  }
+
+  private Movie findMovieByIdOrThrow(Long id) {
+    return movieRepository
+        .findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Movie not found with id " + id));
   }
 }

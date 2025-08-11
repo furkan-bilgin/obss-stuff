@@ -1,11 +1,13 @@
 package com.furkanbilgin.finalproject.movieportal.dto.user.favorite;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 public class UserFavoriteMovieDTO {
+  @NotNull
   private Long movieId;
-  private Long score;
+  @NotNull private Long score;
 }
