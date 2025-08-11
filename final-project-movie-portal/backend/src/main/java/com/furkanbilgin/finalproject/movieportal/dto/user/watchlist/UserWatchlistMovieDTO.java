@@ -1,5 +1,11 @@
 package com.furkanbilgin.finalproject.movieportal.dto.user.watchlist;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record UserWatchlistMovieDTO(@NotBlank Long movieId) {}
+@Data
+@NoArgsConstructor
+public class UserWatchlistMovieDTO {
+  @NotBlank private Long movieId;
+}

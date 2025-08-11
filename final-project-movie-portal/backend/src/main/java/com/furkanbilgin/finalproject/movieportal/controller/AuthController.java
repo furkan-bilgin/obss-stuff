@@ -33,13 +33,13 @@ public class AuthController {
       var auth =
           authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
-                  loginUserDTO.username(), loginUserDTO.password()));
+                  loginUserDTO.getUsername(), loginUserDTO.getPassword()));
       SecurityContextHolder.getContext().setAuthentication(auth);
       var user = userService.findUserByUsername(auth.getName());
       if (user.isEmpty()) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
       }
-      var token = userService.updateUserToken(user.get().id());
+      var token = userService.updateUserToken(user.get().getId());
       return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(token));
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
@@ -48,7 +48,7 @@ public class AuthController {
 
   @PostMapping("/register")
   public ResponseEntity<?> register(@RequestBody RegisterRequestDTO registerUserDTO) {
-    if (userService.findUserByUsername(registerUserDTO.username()).isPresent()) {
+    if (userService.findUserByUsername(registerUserDTO.getUsername()).isPresent()) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
     }
     return ResponseEntity.status(HttpStatus.CREATED)

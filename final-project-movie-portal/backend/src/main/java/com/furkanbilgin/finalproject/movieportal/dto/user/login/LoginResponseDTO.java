@@ -1,3 +1,12 @@
 package com.furkanbilgin.finalproject.movieportal.dto.user.login;
 
-public record LoginResponseDTO(String token) {}
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoginResponseDTO {
+  private String token;
+}

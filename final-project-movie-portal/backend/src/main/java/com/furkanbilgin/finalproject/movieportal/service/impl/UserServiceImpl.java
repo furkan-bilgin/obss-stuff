@@ -1,5 +1,6 @@
 package com.furkanbilgin.finalproject.movieportal.service.impl;
 
+import com.furkanbilgin.finalproject.movieportal.config.PasswordHasher;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
 import com.furkanbilgin.finalproject.movieportal.model.user.User;
@@ -19,22 +20,26 @@ public class UserServiceImpl implements UserService {
   private final ModelMapper modelMapper;
   private final JWTService jwtService;
   private final Long jwtTtl;
+  private final PasswordHasher passwordHasher;
 
   @Autowired
   public UserServiceImpl(
       UserRepository userRepository,
       ModelMapper modelMapper,
       JWTService jwtService,
-      @Value("${application.security.jwt-ttl}") Long jwtTtl) {
+      @Value("${application.security.jwt-ttl}") Long jwtTtl,
+      PasswordHasher passwordHasher) {
     this.userRepository = userRepository;
     this.modelMapper = modelMapper;
     this.jwtService = jwtService;
     this.jwtTtl = jwtTtl;
+    this.passwordHasher = passwordHasher;
   }
 
   public UserDTO saveUser(RegisterRequestDTO registerUserDTO) {
     var user = modelMapper.map(registerUserDTO, User.class);
-    userRepository.save(user);
+    user.setPassword(passwordHasher.hashPassword(registerUserDTO.getPassword()));
+    user = userRepository.save(user);
     return modelMapper.map(user, UserDTO.class);
   }
 
@@ -59,8 +64,8 @@ public class UserServiceImpl implements UserService {
     var userOpt = userRepository.findById(id);
     if (userOpt.isPresent()) {
       var user = userOpt.get();
-      user.setUsername(userDTO.username());
-      user.setEmail(userDTO.email());
+      user.setUsername(userDTO.getUsername());
+      user.setEmail(userDTO.getEmail());
       return Optional.of(modelMapper.map(user, UserDTO.class));
     }
     return Optional.empty();
@@ -69,7 +74,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public String updateUserToken(Long id) {
     var user = this.findUserById(id);
-    return user.map(userDTO -> jwtService.generate(userDTO.username(), jwtTtl)).orElse(null);
+    return user.map(userDTO -> jwtService.generate(userDTO.getUsername(), jwtTtl)).orElse(null);
   }
 
   public Optional<UserDTO> deleteUser(Long id) {

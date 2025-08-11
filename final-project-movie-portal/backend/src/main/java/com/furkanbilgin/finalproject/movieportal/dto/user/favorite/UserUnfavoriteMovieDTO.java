@@ -1,5 +1,11 @@
 package com.furkanbilgin.finalproject.movieportal.dto.user.favorite;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record UserUnfavoriteMovieDTO(@NotBlank Long movieId) {}
+@Data
+@NoArgsConstructor
+public class UserUnfavoriteMovieDTO {
+  @NotBlank private Long movieId;
+}

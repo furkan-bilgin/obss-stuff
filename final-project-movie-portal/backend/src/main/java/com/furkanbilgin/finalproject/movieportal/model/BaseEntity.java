@@ -1,15 +1,15 @@
 package com.furkanbilgin.finalproject.movieportal.model;
 
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @MappedSuperclass
 @SuperBuilder(toBuilder = true)
+@Getter
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)

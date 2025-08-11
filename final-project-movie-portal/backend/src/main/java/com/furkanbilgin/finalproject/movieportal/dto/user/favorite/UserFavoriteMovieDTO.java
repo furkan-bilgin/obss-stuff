@@ -1,3 +1,11 @@
 package com.furkanbilgin.finalproject.movieportal.dto.user.favorite;
 
-public record UserFavoriteMovieDTO(Long movieId, Long score) {}
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class UserFavoriteMovieDTO {
+  private Long movieId;
+  private Long score;
+}
