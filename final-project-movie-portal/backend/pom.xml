@@ -96,21 +96,9 @@
             <version>3.2.0</version>
         </dependency>
         <dependency>
-            <artifactId>jjwt-api</artifactId>
+            <artifactId>jjwt</artifactId>
             <groupId>io.jsonwebtoken</groupId>
-            <version>${jwt.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>jjwt-impl</artifactId>
-            <groupId>io.jsonwebtoken</groupId>
-            <scope>runtime</scope>
-            <version>${jwt.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>jjwt-jackson</artifactId>
-            <groupId>io.jsonwebtoken</groupId>
-            <scope>runtime</scope>
-            <version>${jwt.version}</version>
+            <version>0.12.5</version>
         </dependency>
     </dependencies>
     <description>movieportal</description>

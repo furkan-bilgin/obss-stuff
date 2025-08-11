@@ -1,0 +1,4 @@
+application:
+  security:
+    secret-key: FD786FA85F3A9A8F3CAE9DB2B97ED
+    jwt-ttl: 300000

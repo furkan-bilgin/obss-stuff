@@ -2,30 +2,40 @@ package com.furkanbilgin.finalproject.movieportal.service.impl;
 
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
+import com.furkanbilgin.finalproject.movieportal.model.user.User;
 import com.furkanbilgin.finalproject.movieportal.repository.UserRepository;
+import com.furkanbilgin.finalproject.movieportal.service.JWTService;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
-
   private final ModelMapper modelMapper;
+  private final JWTService jwtService;
+  private final Long jwtTtl;
 
   @Autowired
-  public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+  public UserServiceImpl(
+      UserRepository userRepository,
+      ModelMapper modelMapper,
+      JWTService jwtService,
+      @Value("{application.security.jwt-ttl}") Long jwtTtl) {
     this.userRepository = userRepository;
     this.modelMapper = modelMapper;
+    this.jwtService = jwtService;
+    this.jwtTtl = jwtTtl;
   }
 
   public UserDTO saveUser(RegisterRequestDTO registerUserDTO) {
-    /*User user = UserMapper.toEntity(userDTO);
-    return UserMapper.toDTO(userRepository.save(user));*/
-    return null;
+    var user = modelMapper.map(registerUserDTO, User.class);
+    userRepository.save(user);
+    return modelMapper.map(user, UserDTO.class);
   }
 
   public List<UserDTO> findAllUsers() {
@@ -40,11 +50,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Optional<UserDTO> findUserByUsername(String username) {
-    var user = userRepository.findByUsername(username);
-    if (user.isEmpty()) {
-      return Optional.empty();
-    }
-    return Optional.of(modelMapper.map(user, UserDTO.class));
+    return userRepository
+        .findByUsername(username)
+        .map(user -> modelMapper.map(user, UserDTO.class));
   }
 
   public Optional<UserDTO> updateUser(Long id, UserDTO userDTO) {
@@ -61,10 +69,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public String updateUserToken(Long id) {
     var user = this.findUserById(id);
-    if (user.isEmpty()) {
-      return null;
-    }
-    return "TODO";
+    return user.map(userDTO -> jwtService.generate(userDTO.username(), jwtTtl)).orElse(null);
   }
 
   public Optional<UserDTO> deleteUser(Long id) {
