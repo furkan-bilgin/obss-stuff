@@ -1,4 +1,4 @@
 application:
   security:
     secret-key: $;38UHY?T/<}if*_W"oM1:4}YQ,Obz9:$i:.KC#OtzSE(TkE>,8}--nRYu{?ni5
-    jwt-ttl: 300000
+    jwt-ttl: 30000000

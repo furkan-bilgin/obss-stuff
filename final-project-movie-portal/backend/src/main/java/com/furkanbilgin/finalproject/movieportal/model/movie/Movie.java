@@ -1,7 +1,6 @@
 package com.furkanbilgin.finalproject.movieportal.model.movie;
 
 import com.furkanbilgin.finalproject.movieportal.model.BaseEntity;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,14 +8,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-
-import lombok.Getter;
-
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 public class Movie extends BaseEntity {
     @Column private String title;
     @Column private String description;

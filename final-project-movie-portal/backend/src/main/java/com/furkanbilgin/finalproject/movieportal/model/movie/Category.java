@@ -1,20 +1,13 @@
 package com.furkanbilgin.finalproject.movieportal.model.movie;
 
 import com.furkanbilgin.finalproject.movieportal.model.BaseEntity;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-
 import lombok.Getter;
-
-import java.util.Set;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 public class Category extends BaseEntity {
-    @Column private String categoryName;
-
-    @ManyToMany(mappedBy = "categories")
-    private Set<Movie> movies;
+  private String name;
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,12 +26,13 @@ public class UserController {
     this.userService = userService;
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN', 'LECTURER')")
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("/")
-  public List<UserDTO> getAllUsers() {
-    return userService.findAllUsers();
+  public ResponseEntity<List<UserDTO>> getAllUsers() {
+    return ResponseEntity.ok(userService.findAllUsers());
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("/{id}")
   public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
     return returnUserResponse(userService.findUserById(id));
@@ -46,6 +48,12 @@ public class UserController {
   @DeleteMapping("/{id}")
   public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
     return returnUserResponse(userService.deleteUser(id));
+  }
+
+  @GetMapping("/me")
+  public ResponseEntity<UserDTO> getCurrentUser() {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    return returnUserResponse(userService.findUserByUsername(username));
   }
 
   private ResponseEntity<UserDTO> returnUserResponse(Optional<UserDTO> userDTO) {
