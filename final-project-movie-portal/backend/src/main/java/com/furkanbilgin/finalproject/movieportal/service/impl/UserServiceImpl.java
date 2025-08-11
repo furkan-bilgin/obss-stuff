@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
       UserRepository userRepository,
       ModelMapper modelMapper,
       JWTService jwtService,
-      @Value("{application.security.jwt-ttl}") Long jwtTtl) {
+      @Value("${application.security.jwt-ttl}") Long jwtTtl) {
     this.userRepository = userRepository;
     this.modelMapper = modelMapper;
     this.jwtService = jwtService;
