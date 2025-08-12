@@ -10,6 +10,7 @@ import Login from './lib/routes/Login';
 import { ProtectedRoute } from './lib/ProtectedRoute';
 import Home from './lib/routes/Home';
 import Header from './lib/Header';
+import Movie from './lib/routes/Movie';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
         }
       >
         <Route index element={<Home />} />
+        <Route path="movie/:id" element={<Movie />} />
       </Route>
     </Route>
   )

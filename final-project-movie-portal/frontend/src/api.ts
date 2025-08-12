@@ -36,6 +36,11 @@ export async function login(login: LoginRequestDto) {
   }
 }
 
+export function logout() {
+  useUserStore.setState({ user: null, token: null });
+  setClientToken(null);
+}
+
 function setClientToken(token: string | null) {
   if (!token) {
     return;

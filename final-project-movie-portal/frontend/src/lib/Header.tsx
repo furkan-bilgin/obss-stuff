@@ -1,15 +1,17 @@
 import { FaUser } from 'react-icons/fa';
 import { FiLogOut, FiSettings } from 'react-icons/fi';
 import { MdLocalMovies } from 'react-icons/md';
+import { logout } from '../api';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">
+        <Link to="/user" className="btn btn-ghost text-xl">
           <MdLocalMovies />
           Movie Portal
-        </a>
+        </Link>
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">
@@ -37,7 +39,12 @@ export default function Header() {
               </a>
             </li>
             <li>
-              <a>
+              <a
+                onClick={() => {
+                  logout();
+                  window.location.reload();
+                }}
+              >
                 <FiLogOut />
                 Logout
               </a>

@@ -3,11 +3,13 @@ import { getAllMovies, type MovieDto } from '../../client';
 import { client } from '../../api';
 import { FaStar } from 'react-icons/fa';
 import { BiCalendar } from 'react-icons/bi';
+import { IoIosArrowForward } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   // Fetch movies from api
   const [movies, setMovies] = useState<MovieDto[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getAllMovies({ client })
       .then((res) => setMovies(res.data ?? []))
@@ -15,15 +17,16 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-base-200">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-base-200">
-      {loading ? (
-        <div className="w-full max-w-sm p-8 shadow-lg rounded-lg bg-base-100">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      ) : (
-        ''
-      )}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-2">
         {movies.map((movie) => (
           <div className="card bg-base-100 w-96 shadow-sm">
@@ -57,7 +60,13 @@ export default function Home() {
                 {movie.description?.length ?? 0 > 150 ? '...' : ''}
               </p>
               <div className="card-actions justify-end">
-                <button className="btn btn-primary">Details</button>
+                <Link
+                  to={`/user/movie/${movie.id}`}
+                  className="btn btn-sm btn-primary"
+                >
+                  <IoIosArrowForward />
+                  Details
+                </Link>
               </div>
             </div>
           </div>
