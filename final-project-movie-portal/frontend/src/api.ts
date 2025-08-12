@@ -1,4 +1,10 @@
-import { getMe, login as loginApi, type LoginRequestDto } from './client';
+import {
+  getMe,
+  getUserFavorites,
+  getUserWatchlist,
+  login as loginApi,
+  type LoginRequestDto,
+} from './client';
 import { createClient, createConfig } from './client/client';
 import { useUserStore } from './lib/state/user';
 
@@ -20,15 +26,7 @@ export async function login(login: LoginRequestDto) {
     }
     useUserStore.setState({ token });
     setClientToken(token);
-    const meResult = await getMe({ client });
-    if (!meResult.data) {
-      useUserStore.setState({ token: null, user: null });
-      throw new Error(
-        'Authentication succeeded, but failed to fetch user profile.'
-      );
-    }
-
-    useUserStore.setState({ user: meResult.data });
+    fetchUserData();
   } catch (error) {
     useUserStore.setState({ user: null, token: null });
     console.error('Login failed:', error);
@@ -53,4 +51,29 @@ function setClientToken(token: string | null) {
   });
 }
 
-setClientToken(useUserStore.getState().token);
+function fetchUserData() {
+  getMe({ client }).then((res) => {
+    useUserStore.setState({ user: res.data });
+  });
+  // Get user watchlist
+  getUserWatchlist({
+    client,
+    path: { id: useUserStore.getState().user?.id ?? 0 },
+  }).then((res) => {
+    useUserStore.setState({ watchlist: res.data?.watchlist });
+  });
+  // Get user favorites
+  getUserFavorites({
+    client,
+    path: { id: useUserStore.getState().user?.id ?? 0 },
+  }).then((res) => {
+    useUserStore.setState({ favorites: res.data?.favorites });
+  });
+}
+
+function init() {
+  setClientToken(useUserStore.getState().token);
+  fetchUserData();
+}
+
+init();

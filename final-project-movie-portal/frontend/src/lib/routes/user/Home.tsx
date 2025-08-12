@@ -5,11 +5,15 @@ import { FaStar } from 'react-icons/fa';
 import { BiCalendar } from 'react-icons/bi';
 import { IoIosArrowForward } from 'react-icons/io';
 import { Link } from 'react-router-dom';
+import { useUserStore } from '../../state/user';
+import { IoHeart, IoWatch } from 'react-icons/io5';
+import { CiBoxList } from 'react-icons/ci';
 
 export default function Home() {
   // Fetch movies from api
   const [movies, setMovies] = useState<MovieDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const userData = useUserStore((state) => state);
   useEffect(() => {
     getAllMovies({ client })
       .then((res) => setMovies(res.data ?? []))
@@ -22,14 +26,30 @@ export default function Home() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-2">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {movies.map((movie) => (
         <div className="card bg-base-100 w-96 shadow-sm">
           <figure>
             <img src={movie.posterUrl} />
           </figure>
           <div className="card-body">
-            <h2 className="card-title">{movie.title}</h2>
+            <h2 className="card-title">
+              {userData.favorites?.find((fav) => fav.movie?.id === movie.id) ? (
+                <span className="badge badge-error">
+                  <IoHeart size={20} />
+                </span>
+              ) : (
+                ''
+              )}
+              {userData.watchlist?.find((watch) => watch.id === movie.id) ? (
+                <span className="badge badge-primary">
+                  <CiBoxList size={20} />
+                </span>
+              ) : (
+                ''
+              )}
+              {movie.title}
+            </h2>
             <div className="flex flex-wrap gap-1">
               {movie.categories?.map((category) => (
                 <div key={category.id} className="badge badge-outline">

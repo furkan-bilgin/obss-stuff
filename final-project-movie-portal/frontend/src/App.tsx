@@ -21,10 +21,8 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <Header />
-            <div className="min-h-screen bg-base-200">
-              <div className="flex justify-center">
-                <Outlet />
-              </div>
+            <div className="flex justify-center mt-4">
+              <Outlet />
             </div>
           </ProtectedRoute>
         }
