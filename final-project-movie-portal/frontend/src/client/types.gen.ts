@@ -73,14 +73,9 @@ export type UserMovieWatchlistResponseDto = {
     watchlist?: Array<MovieDto>;
 };
 
-export type MovieScorePairDto = {
-    movie?: MovieDto;
-    score?: number;
-};
-
 export type UserMovieFavoriteResponseDto = {
     user?: UserDto;
-    favorites?: Array<MovieScorePairDto>;
+    favorites?: Array<MovieDto>;
 };
 
 export type Pageable = {
@@ -425,13 +420,31 @@ export type LoginResponses = {
 
 export type LoginResponse = LoginResponses[keyof LoginResponses];
 
+export type GetUserByUsernameData = {
+    body?: never;
+    path: {
+        username: string;
+    };
+    query?: never;
+    url: '/users/username/{username}';
+};
+
+export type GetUserByUsernameResponses = {
+    /**
+     * OK
+     */
+    200: UserDto;
+};
+
+export type GetUserByUsernameResponse = GetUserByUsernameResponses[keyof GetUserByUsernameResponses];
+
 export type GetUserWatchlistData = {
     body?: never;
     path: {
-        id: number;
+        username: string;
     };
     query?: never;
-    url: '/users/{id}/watchlist';
+    url: '/users/username/{username}/watchlist';
 };
 
 export type GetUserWatchlistResponses = {
@@ -446,10 +459,10 @@ export type GetUserWatchlistResponse = GetUserWatchlistResponses[keyof GetUserWa
 export type GetUserFavoritesData = {
     body?: never;
     path: {
-        id: number;
+        username: string;
     };
     query?: never;
-    url: '/users/{id}/favorites';
+    url: '/users/username/{username}/favorites';
 };
 
 export type GetUserFavoritesResponses = {

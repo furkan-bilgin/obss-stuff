@@ -1,12 +1,12 @@
 import { create } from 'zustand';
-import type { MovieDto, MovieScorePairDto, UserDto } from '../../client';
+import type { MovieDto, UserDto } from '../client';
 import { persist } from 'zustand/middleware';
 
 export type UserState = {
   user: UserDto | null;
   token: string | null;
   watchlist: MovieDto[] | null;
-  favorites: MovieScorePairDto[] | null;
+  favorites: MovieDto[] | null;
 };
 
 export const useUserStore = create<UserState>()(

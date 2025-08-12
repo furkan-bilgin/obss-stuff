@@ -3,6 +3,7 @@ import { FiLogOut, FiSettings } from 'react-icons/fi';
 import { MdLocalMovies } from 'react-icons/md';
 import { apiClient } from '../api';
 import { Link } from 'react-router-dom';
+import { useUserStore } from '../state/user';
 
 export default function Header() {
   return (
@@ -27,10 +28,12 @@ export default function Header() {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a>
+              <Link
+                to={'/user/profile/' + useUserStore.getState().user?.username}
+              >
                 <FaUser />
                 Profile
-              </a>
+              </Link>
             </li>
             <li>
               <a>

@@ -11,6 +11,7 @@ import { ProtectedRoute } from './lib/ProtectedRoute';
 import Header from './lib/Header';
 import Movie from './routes/user/Movie';
 import { Home } from './routes/user/Home';
+import { Profile } from './routes/user/Profile';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       >
         <Route index element={<Home />} />
         <Route path="movie/:id" element={<Movie />} />
+        <Route path="profile/:username" element={<Profile />} />
       </Route>
     </Route>
   )

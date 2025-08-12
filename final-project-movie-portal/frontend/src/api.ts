@@ -8,6 +8,7 @@ class APIClient {
     this.client = createClient(
       createConfig({
         baseURL: 'http://127.0.0.1:8080',
+        throwOnError: true,
       })
     );
   }
@@ -54,23 +55,18 @@ class APIClient {
     const me = await restClient.getMe({ client: this.client });
     useUserStore.setState({ user: me.data });
     // Get user watchlist
-    restClient
-      .getUserWatchlist({
-        client: this.client,
-        path: { id: useUserStore.getState().user?.id ?? 0 },
-      })
-      .then((res) => {
-        useUserStore.setState({ watchlist: res.data?.watchlist });
-      });
-    // Get user favorites
-    restClient
-      .getUserFavorites({
-        client: this.client,
-        path: { id: useUserStore.getState().user?.id ?? 0 },
-      })
-      .then((res) => {
-        useUserStore.setState({ favorites: res.data?.favorites });
-      });
+    const username = useUserStore.getState().user?.username ?? '';
+    const watchlistRes = await restClient.getUserWatchlist({
+      client: this.client,
+      path: { username },
+    });
+    useUserStore.setState({ watchlist: watchlistRes.data?.watchlist });
+
+    const favoritesRes = await restClient.getUserFavorites({
+      client: this.client,
+      path: { username },
+    });
+    useUserStore.setState({ favorites: favoritesRes.data?.favorites });
   }
 
   // TODO: Move crud stuff to a different class
@@ -116,6 +112,27 @@ class APIClient {
         body: { movieId: id },
       })
     );
+  }
+
+  getWatchlistByUsername(username: string) {
+    return restClient.getUserWatchlist({
+      client: this.client,
+      path: { username },
+    });
+  }
+
+  getFavoritesByUsername(username: string) {
+    return restClient.getUserFavorites({
+      client: this.client,
+      path: { username },
+    });
+  }
+
+  getUserByUsername(username: string) {
+    return restClient.getUserByUsername({
+      client: this.client,
+      path: { username },
+    });
   }
 
   init() {
