@@ -4,11 +4,15 @@ import com.furkanbilgin.finalproject.movieportal.dto.user.login.LoginRequestDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.login.LoginResponseDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterResponseDTO;
+import com.furkanbilgin.finalproject.movieportal.exception.InvalidCredentialsException;
+import com.furkanbilgin.finalproject.movieportal.exception.UserAlreadyExistsException;
+import com.furkanbilgin.finalproject.movieportal.exception.UserNotFoundException;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +32,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginUserDTO) {
+  public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginUserDTO) {
     try {
       var auth =
           authenticationManager.authenticate(
@@ -37,19 +41,20 @@ public class AuthController {
       SecurityContextHolder.getContext().setAuthentication(auth);
       var user = userService.findUserByUsername(auth.getName());
       if (user.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        throw new UserNotFoundException("User not found");
       }
       var token = userService.updateUserToken(user.get().getId());
       return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(token));
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+    } catch (AuthenticationException e) {
+      throw new InvalidCredentialsException("Invalid username or password");
     }
   }
 
   @PostMapping("/register")
-  public ResponseEntity<?> register(@RequestBody RegisterRequestDTO registerUserDTO) {
+  public ResponseEntity<RegisterResponseDTO> register(
+      @RequestBody RegisterRequestDTO registerUserDTO) {
     if (userService.findUserByUsername(registerUserDTO.getUsername()).isPresent()) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+      throw new UserAlreadyExistsException("Username already exists");
     }
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(new RegisterResponseDTO(userService.saveUser(registerUserDTO)));
