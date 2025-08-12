@@ -1,0 +1,10 @@
+package com.furkanbilgin.finalproject.movieportal.dto.user;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class RoleDTO {
+  private String name;
+}

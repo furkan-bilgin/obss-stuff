@@ -3,8 +3,8 @@ package com.furkanbilgin.finalproject.movieportal.service.impl;
 import com.furkanbilgin.finalproject.movieportal.config.PasswordHasher;
 import com.furkanbilgin.finalproject.movieportal.dto.movie.MovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieFavoriteDTO;
-import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieWatchlistDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieFavoriteResponseDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieWatchlistResponseDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
 import com.furkanbilgin.finalproject.movieportal.model.movie.Movie;
 import com.furkanbilgin.finalproject.movieportal.model.user.User;
@@ -91,28 +91,28 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserMovieFavoriteDTO getUserMovieFavorites(Long id) {
+  public UserMovieFavoriteResponseDTO getUserMovieFavorites(Long id) {
     var user = findUserByIdOrThrow(id);
     // TODO: n+1?
     var favorites =
         user.getFavorites().stream()
             .map(
                 favorite ->
-                    new UserMovieFavoriteDTO.MovieScorePairDTO(
+                    new UserMovieFavoriteResponseDTO.MovieScorePairDTO(
                         modelMapper.map(favorite.getMovie(), MovieDTO.class), favorite.getScore()))
             .toList();
-    return new UserMovieFavoriteDTO(modelMapper.map(user, UserDTO.class), favorites);
+    return new UserMovieFavoriteResponseDTO(modelMapper.map(user, UserDTO.class), favorites);
   }
 
   @Override
-  public UserMovieWatchlistDTO getUserWatchlist(Long id) {
+  public UserMovieWatchlistResponseDTO getUserWatchlist(Long id) {
     var user = findUserByIdOrThrow(id);
     // TODO: n+1?
     var watchlist =
         user.getWatchlist().stream()
             .map(watchlistItem -> modelMapper.map(watchlistItem.getMovie(), MovieDTO.class))
             .toList();
-    return new UserMovieWatchlistDTO(modelMapper.map(user, UserDTO.class), watchlist);
+    return new UserMovieWatchlistResponseDTO(modelMapper.map(user, UserDTO.class), watchlist);
   }
 
   @Override
