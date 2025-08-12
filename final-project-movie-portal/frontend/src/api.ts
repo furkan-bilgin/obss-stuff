@@ -24,7 +24,7 @@ class APIClient {
       }
       useUserStore.setState({ token });
       this.setClientToken(token);
-      this.fetchUserData();
+      await this.fetchUserData();
     } catch (error) {
       useUserStore.setState({ user: null, token: null });
       console.error('Login failed:', error);
@@ -49,10 +49,10 @@ class APIClient {
     });
   }
 
-  fetchUserData() {
-    restClient.getMe({ client: this.client }).then((res) => {
-      useUserStore.setState({ user: res.data });
-    });
+  async fetchUserData() {
+    // Get user profile
+    const me = await restClient.getMe({ client: this.client });
+    useUserStore.setState({ user: me.data });
     // Get user watchlist
     restClient
       .getUserWatchlist({
