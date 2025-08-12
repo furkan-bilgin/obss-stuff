@@ -6,6 +6,7 @@ import { FaStar } from 'react-icons/fa';
 import { BiCalendar, BiTime } from 'react-icons/bi';
 import {
   MdLanguage,
+  MdLocationCity,
   MdMovie,
   MdOutlinePlaylistAdd,
   MdOutlinePlaylistRemove,
@@ -84,10 +85,11 @@ export const Movie = () => {
           </div>
           <div className="flex items-center gap-2">
             <MdLanguage className="text-xl" />
-            <strong>Language:</strong> {movie.language}
+            <strong>Language:</strong> {movie.language || 'N/A'}
           </div>
           <div className="flex items-center gap-2">
-            <strong>Country:</strong> {movie.country}
+            <MdLocationCity className="text-xl" />
+            <strong>Country:</strong> {movie.country || 'N/A'}
           </div>
         </div>
         <div className="flex flex-wrap gap-4">
