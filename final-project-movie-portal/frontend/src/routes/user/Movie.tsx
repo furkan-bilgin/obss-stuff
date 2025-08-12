@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { type MovieDto } from '../../../client';
-import { apiClient } from '../../../api';
+import { type MovieDto } from '../../client';
+import { apiClient } from '../../api';
 import { FaStar } from 'react-icons/fa';
-import { BiCalendar, BiTime } from 'react-icons/bi';
+import { BiCalendar, BiError, BiTime } from 'react-icons/bi';
 import {
   MdLanguage,
   MdMovie,
@@ -12,6 +12,7 @@ import {
 } from 'react-icons/md';
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import { useUserStore } from '../../state/user';
+import { MovieProps } from '../../lib/user/MovieProps';
 
 export default function Movie() {
   const { id } = useParams<{ id: string }>();
@@ -42,34 +43,14 @@ export default function Movie() {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-base-200">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
+    return <span className="loading loading-spinner loading-lg"></span>;
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-base-200">
-        <div className="alert alert-error shadow-lg">
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current flex-shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>Error! {error}</span>
-          </div>
-        </div>
+      <div className="alert alert-error shadow-lg">
+        <BiError size={20} />
+        <span>Error! {error}</span>
       </div>
     );
   }
@@ -88,7 +69,10 @@ export default function Movie() {
         />
       </figure>
       <div className="card-body lg:w-2/3">
-        <h1 className="card-title text-3xl md:text-4xl">{movie.title}</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="card-title text-3xl md:text-4xl">{movie.title}</h1>
+          <MovieProps movie={movie} />
+        </div>
         <div className="flex flex-wrap gap-2 my-2">
           {movie.categories?.map((category) => (
             <div key={category.id} className="badge badge-outline">

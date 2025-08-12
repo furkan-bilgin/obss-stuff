@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { type MovieDto } from '../../../client';
-import { apiClient } from '../../../api';
+import { type MovieDto } from '../../client';
+import { apiClient } from '../../api';
 import { FaStar } from 'react-icons/fa';
 import { BiCalendar } from 'react-icons/bi';
 import { IoIosArrowForward } from 'react-icons/io';
@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 import { useUserStore } from '../../state/user';
 import { IoHeart } from 'react-icons/io5';
 import { CiBoxList } from 'react-icons/ci';
+import { MovieProps } from '../../lib/user/MovieProps';
 
-export default function Home() {
+export const Home = () => {
   // Fetch movies from api
   const [movies, setMovies] = useState<MovieDto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,23 +35,10 @@ export default function Home() {
             <img src={movie.posterUrl} />
           </figure>
           <div className="card-body">
-            <h2 className="card-title">
-              {userData.favorites?.find((fav) => fav.movie?.id === movie.id) ? (
-                <span className="badge badge-error">
-                  <IoHeart size={20} />
-                </span>
-              ) : (
-                ''
-              )}
-              {userData.watchlist?.find((watch) => watch.id === movie.id) ? (
-                <span className="badge badge-primary">
-                  <CiBoxList size={20} />
-                </span>
-              ) : (
-                ''
-              )}
-              {movie.title}
-            </h2>
+            <div className="flex justify-between items-center">
+              <h2 className="card-title text-2xl">{movie.title}</h2>
+              <MovieProps movie={movie} />
+            </div>
             <div className="flex flex-wrap gap-1">
               {movie.categories?.map((category) => (
                 <div key={category.id} className="badge badge-outline">
@@ -89,4 +77,4 @@ export default function Home() {
       ))}
     </div>
   );
-}
+};

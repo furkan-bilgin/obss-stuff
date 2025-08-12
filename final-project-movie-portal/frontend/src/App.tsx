@@ -6,11 +6,11 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import './App.css';
-import Login from './lib/routes/Login';
+import Login from './routes/Login';
 import { ProtectedRoute } from './lib/ProtectedRoute';
-import Home from './lib/routes/user/Home';
 import Header from './lib/Header';
-import Movie from './lib/routes/user/Movie';
+import Movie from './routes/user/Movie';
+import { Home } from './routes/user/Home';
 
 const router = createBrowserRouter(
   createRoutesFromElements(

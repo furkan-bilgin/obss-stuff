@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { apiClient } from '../../api';
+import { apiClient } from '../api';
 
 export default function Login() {
   const [username, setEmail] = useState('');

@@ -1,6 +1,6 @@
 import * as restClient from './client';
 import { createClient, createConfig, type Client } from './client/client';
-import { useUserStore } from './lib/state/user';
+import { useUserStore } from './state/user';
 
 class APIClient {
   client: Client;
