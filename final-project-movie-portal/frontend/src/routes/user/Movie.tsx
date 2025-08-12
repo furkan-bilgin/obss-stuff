@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { type MovieDto } from '../../client';
 import { apiClient } from '../../api';
 import { FaStar } from 'react-icons/fa';
-import { BiCalendar, BiError, BiTime } from 'react-icons/bi';
+import { BiCalendar, BiTime } from 'react-icons/bi';
 import {
   MdLanguage,
   MdMovie,
@@ -13,51 +13,37 @@ import {
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import { useUserStore } from '../../state/user';
 import { MovieProps } from '../../lib/user/MovieProps';
+import { LoadingSpinner } from '../../lib/LoadingSpinner';
+import { ErrorMessage } from '../../lib/ErrorMessage';
 
-export default function Movie() {
+export const Movie = () => {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieDto | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
   const userData = useUserStore((state) => state);
 
   useEffect(() => {
-    if (!id) {
-      setError('Movie ID is missing.');
-      setLoading(false);
-      return;
-    }
-
-    apiClient
-      .getMovieById(parseInt(id))
-      .then((res) => {
-        setMovie(res.data ?? null);
-      })
-      .catch((err) => {
+    const fetchData = async () => {
+      try {
+        if (!id) throw new Error('Movie ID is missing.');
+        const movieRes = await apiClient.getMovieById(parseInt(id));
+        setMovie(movieRes.data ?? null);
+      } catch (err) {
         console.error(err);
-        setError('Failed to fetch movie details.');
-      })
-      .finally(() => {
+        if (err instanceof Error) {
+          setError(err);
+          return;
+        }
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchData();
   }, [id]);
 
-  if (loading) {
-    return <span className="loading loading-spinner loading-lg"></span>;
-  }
-
-  if (error) {
-    return (
-      <div className="alert alert-error shadow-lg">
-        <BiError size={20} />
-        <span>Error! {error}</span>
-      </div>
-    );
-  }
-
-  if (!movie) {
-    return null;
-  }
+  if (error) return <ErrorMessage error={error} />;
+  if (loading || !movie) return <LoadingSpinner />;
 
   return (
     <div className="card lg:card-side bg-base-100 shadow-xl max-w-4xl">
@@ -135,7 +121,7 @@ export default function Movie() {
               Add to Watchlist
             </button>
           )}
-          {userData.favorites?.find((fav) => fav.movie?.id === movie.id) ? (
+          {userData.favorites?.find((fav) => fav?.id === movie.id) ? (
             <button
               className="btn btn-outline btn-secondary"
               onClick={() => apiClient.unfavoriteMovie(movie.id as number)}
@@ -156,4 +142,4 @@ export default function Movie() {
       </div>
     </div>
   );
-}
+};

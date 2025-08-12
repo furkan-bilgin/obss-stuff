@@ -6,10 +6,10 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import './App.css';
-import Login from './routes/Login';
+import { Login } from './routes/Login';
 import { ProtectedRoute } from './lib/ProtectedRoute';
-import Header from './lib/Header';
-import Movie from './routes/user/Movie';
+import { Header } from './lib/Header';
+import { Movie } from './routes/user/Movie';
 import { Home } from './routes/user/Home';
 import { Profile } from './routes/user/Profile';
 

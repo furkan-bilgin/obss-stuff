@@ -7,7 +7,7 @@ export const MovieProps = ({ movie }: { movie: MovieDto }) => {
   const userData = useUserStore((state) => state);
   return (
     <div className="flex items-center gap-2">
-      {userData.favorites?.find((fav) => fav.movie?.id === movie.id) ? (
+      {userData.favorites?.find((fav) => fav?.id === movie.id) ? (
         <span className="badge badge-error">
           <IoHeart size={20} />
         </span>

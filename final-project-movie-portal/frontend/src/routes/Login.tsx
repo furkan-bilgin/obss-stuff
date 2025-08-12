@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { apiClient } from '../api';
 
-export default function Login() {
+export const Login = () => {
   const [username, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -48,4 +48,4 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};

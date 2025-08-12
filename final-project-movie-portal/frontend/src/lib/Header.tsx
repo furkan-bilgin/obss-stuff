@@ -5,7 +5,7 @@ import { apiClient } from '../api';
 import { Link } from 'react-router-dom';
 import { useUserStore } from '../state/user';
 
-export default function Header() {
+export const Header = () => {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex-1">
@@ -57,4 +57,4 @@ export default function Header() {
       </div>
     </div>
   );
-}
+};
