@@ -17,26 +17,28 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Movie extends BaseEntity {
-    @Column private String title;
-    @Column private String description;
+  @Column private String title;
+  @Column private String description;
 
-    @ManyToOne
-    @JoinTable(
-            name = "movie_director",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "director_id"))
-    private Director director;
+  @ManyToOne
+  @JoinTable(
+      name = "movie_director",
+      joinColumns = @JoinColumn(name = "movie_id"),
+      inverseJoinColumns = @JoinColumn(name = "director_id"))
+  private Director director;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "movie_categories",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>();
+  @ManyToMany(cascade = {CascadeType.ALL})
+  @JoinTable(
+      name = "movie_categories",
+      joinColumns = @JoinColumn(name = "movie_id"),
+      inverseJoinColumns = @JoinColumn(name = "category_id"))
+  private Set<Category> categories = new HashSet<>();
 
-    @Column private String releaseDate;
-    @Column private String genre;
-    @Column private String language;
-    @Column private String country;
-    @Column private String posterUrl;
+  @Column private String releaseDate;
+  @Column private String language;
+  @Column private String country;
+  @Column private String posterUrl;
+  @Column private Float metacriticRating;
+  @Column private Float imdbRating;
+  @Column private Integer runtime; // in minutes
 }

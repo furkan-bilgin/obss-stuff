@@ -1,6 +1,9 @@
 package com.furkanbilgin.finalproject.movieportal.service.impl;
 
+import com.furkanbilgin.finalproject.movieportal.dto.imdbApi.TitleDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.movie.MovieDTO;
+import com.furkanbilgin.finalproject.movieportal.model.movie.Category;
+import com.furkanbilgin.finalproject.movieportal.model.movie.Director;
 import com.furkanbilgin.finalproject.movieportal.model.movie.Movie;
 import com.furkanbilgin.finalproject.movieportal.repository.CategoryRepository;
 import com.furkanbilgin.finalproject.movieportal.repository.DirectorRepository;
@@ -28,6 +31,72 @@ public class MovieServiceImpl implements MovieService {
   public MovieDTO saveMovie(MovieDTO movieDTO) {
     var movie = modelMapper.map(movieDTO, Movie.class);
     updateMovieRelations(movie, movieDTO);
+    var savedMovie = movieRepository.save(movie);
+    return modelMapper.map(savedMovie, MovieDTO.class);
+  }
+
+  @Override
+  @Transactional
+  public MovieDTO saveMovieFromIMDBTitleDTO(TitleDTO titleDTO) {
+    var dbMovie = movieRepository.findByName(titleDTO.getPrimaryTitle());
+    var movie = dbMovie.orElseGet(Movie::new);
+
+    movie.setTitle(titleDTO.getPrimaryTitle());
+    movie.setDescription(titleDTO.getPlot());
+    movie.setReleaseDate(String.valueOf(titleDTO.getStartYear()));
+    movie.setRuntime(titleDTO.getRuntimeSeconds() / 60);
+
+    if (titleDTO.getSpokenLanguages() != null && !titleDTO.getSpokenLanguages().isEmpty()) {
+      movie.setLanguage(titleDTO.getSpokenLanguages().getFirst().getName());
+    }
+
+    if (titleDTO.getOriginCountries() != null && !titleDTO.getOriginCountries().isEmpty()) {
+      movie.setCountry(titleDTO.getOriginCountries().getFirst().getName());
+    }
+
+    if (titleDTO.getPrimaryImage() != null) {
+      movie.setPosterUrl(titleDTO.getPrimaryImage().getUrl());
+    }
+
+    if (titleDTO.getDirectors() != null && !titleDTO.getDirectors().isEmpty()) {
+      var directorDto = titleDTO.getDirectors().getFirst();
+      var director =
+          directorRepository
+              .findByName(directorDto.getDisplayName())
+              .orElseGet(
+                  () -> {
+                    Director newDirector = new Director();
+                    newDirector.setName(directorDto.getDisplayName());
+                    return directorRepository.save(newDirector);
+                  });
+      movie.setDirector(director);
+    }
+
+    if (titleDTO.getGenres() != null && !titleDTO.getGenres().isEmpty()) {
+      var categories =
+          titleDTO.getGenres().stream()
+              .map(
+                  genreName ->
+                      categoryRepository
+                          .findByName(genreName)
+                          .orElseGet(
+                              () -> {
+                                Category newCategory = new Category();
+                                newCategory.setName(genreName);
+                                return categoryRepository.save(newCategory);
+                              }))
+              .collect(Collectors.toSet());
+      movie.setCategories(categories);
+    }
+
+    if (titleDTO.getMetacritic() != null) {
+      movie.setMetacriticRating((float) titleDTO.getMetacritic().getScore());
+    }
+
+    if (titleDTO.getRating() != null) {
+      movie.setImdbRating((float) titleDTO.getRating().getAggregateRating());
+    }
+
     var savedMovie = movieRepository.save(movie);
     return modelMapper.map(savedMovie, MovieDTO.class);
   }
