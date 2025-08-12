@@ -8,8 +8,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +32,7 @@ public class Movie extends BaseEntity {
       name = "movie_categories",
       joinColumns = @JoinColumn(name = "movie_id"),
       inverseJoinColumns = @JoinColumn(name = "category_id"))
-  private Set<Category> categories = new HashSet<>();
+  private List<Category> categories = new ArrayList<>();
 
   @Column private String releaseDate;
   @Column private String language;

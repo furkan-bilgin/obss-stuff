@@ -45,6 +45,11 @@ public class UserController {
     return returnUserResponse(userService.findUserById(id));
   }
 
+  @GetMapping("/username/{username}")
+  public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
+    return returnUserResponse(userService.findUserByUsername(username));
+  }
+
   @GetMapping("/{id}/watchlist")
   public ResponseEntity<UserMovieWatchlistResponseDTO> getUserWatchlist(@PathVariable Long id) {
     var user = getCurrentUser();
