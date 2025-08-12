@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './useAuth.tsx';
 import { useUserStore, type UserState } from '../lib/state/user';
 import type { UserDto } from '../client/types.gen.ts';
-import { client } from '../api.tsx';
+import { apiClient } from '../api.tsx';
 
 // Cool stuff: https://blog.logrocket.com/authentication-react-router-v6/
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -12,8 +12,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (data: UserState) => {
     useUserStore.setState(data);
-    client.setConfig({
-      ...client.getConfig(),
+    apiClient.setConfig({
+      ...apiClient.getConfig(),
       headers: {
         Authorization: `Bearer ${data.token}`,
       },

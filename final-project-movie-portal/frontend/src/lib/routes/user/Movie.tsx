@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovieById, type MovieDto } from '../../../client';
-import { client } from '../../../api';
+import { type MovieDto } from '../../../client';
+import { apiClient } from '../../../api';
 import { FaStar } from 'react-icons/fa';
 import { BiCalendar, BiTime } from 'react-icons/bi';
-import { MdLanguage, MdMovie } from 'react-icons/md';
-import { CiBoxList } from 'react-icons/ci';
-import { IoHeartOutline } from 'react-icons/io5';
+import {
+  MdLanguage,
+  MdMovie,
+  MdOutlinePlaylistAdd,
+  MdOutlinePlaylistRemove,
+} from 'react-icons/md';
+import { IoHeart, IoHeartOutline } from 'react-icons/io5';
+import { useUserStore } from '../../state/user';
 
 export default function Movie() {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const userData = useUserStore((state) => state);
 
   useEffect(() => {
     if (!id) {
@@ -21,7 +27,8 @@ export default function Movie() {
       return;
     }
 
-    getMovieById({ client, path: { id: parseInt(id, 10) } })
+    apiClient
+      .getMovieById(parseInt(id))
       .then((res) => {
         setMovie(res.data ?? null);
       })
@@ -125,14 +132,42 @@ export default function Movie() {
           )}
         </div>
         <div className="card-actions justify-end mt-4">
-          <button className="btn btn-primary">
-            <CiBoxList size={20} />
-            Add to Watchlist
-          </button>
-          <button className="btn btn-secondary">
-            <IoHeartOutline size={20} />
-            Add to Favorites
-          </button>
+          {userData.watchlist?.find((watch) => watch.id === movie.id) ? (
+            <button
+              className="btn btn-outline btn-primary"
+              onClick={() =>
+                apiClient.removeMovieFromWatchlist(movie.id as number)
+              }
+            >
+              <MdOutlinePlaylistRemove />
+              Remove from Watchlist
+            </button>
+          ) : (
+            <button
+              className="btn btn-primary"
+              onClick={() => apiClient.addMovieToWatchlist(movie.id as number)}
+            >
+              <MdOutlinePlaylistAdd />
+              Add to Watchlist
+            </button>
+          )}
+          {userData.favorites?.find((fav) => fav.movie?.id === movie.id) ? (
+            <button
+              className="btn btn-outline btn-secondary"
+              onClick={() => apiClient.unfavoriteMovie(movie.id as number)}
+            >
+              <IoHeart size={20} />
+              Remove from Favorites
+            </button>
+          ) : (
+            <button
+              className="btn btn-secondary"
+              onClick={() => apiClient.favoriteMovie(movie.id as number, 1)}
+            >
+              <IoHeartOutline size={20} />
+              Add to Favorites
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { login } from '../../api';
+import { apiClient } from '../../api';
 
 export default function Login() {
   const [username, setEmail] = useState('');
@@ -8,10 +8,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await login({
-      username,
-      password,
-    });
+    await apiClient.login(username, password);
     window.location.href = '/user';
   };
 

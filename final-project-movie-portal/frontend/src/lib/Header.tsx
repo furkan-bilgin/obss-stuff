@@ -1,7 +1,7 @@
 import { FaUser } from 'react-icons/fa';
 import { FiLogOut, FiSettings } from 'react-icons/fi';
 import { MdLocalMovies } from 'react-icons/md';
-import { logout } from '../api';
+import { apiClient } from '../api';
 import { Link } from 'react-router-dom';
 
 export default function Header() {
@@ -41,7 +41,7 @@ export default function Header() {
             <li>
               <a
                 onClick={() => {
-                  logout();
+                  apiClient.logout();
                   window.location.reload();
                 }}
               >

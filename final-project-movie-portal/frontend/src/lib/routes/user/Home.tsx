@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { getAllMovies, type MovieDto } from '../../../client';
-import { client } from '../../../api';
+import { type MovieDto } from '../../../client';
+import { apiClient } from '../../../api';
 import { FaStar } from 'react-icons/fa';
 import { BiCalendar } from 'react-icons/bi';
 import { IoIosArrowForward } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { useUserStore } from '../../state/user';
-import { IoHeart, IoWatch } from 'react-icons/io5';
+import { IoHeart } from 'react-icons/io5';
 import { CiBoxList } from 'react-icons/ci';
 
 export default function Home() {
@@ -15,7 +15,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const userData = useUserStore((state) => state);
   useEffect(() => {
-    getAllMovies({ client })
+    apiClient
+      .getAllMovies()
       .then((res) => setMovies(res.data ?? []))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
