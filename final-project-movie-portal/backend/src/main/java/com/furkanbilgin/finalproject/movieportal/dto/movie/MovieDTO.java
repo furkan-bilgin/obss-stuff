@@ -12,10 +12,12 @@ public class MovieDTO {
   private String title;
   private String description;
   private DirectorDTO director;
-  private Set<Long> categoryIds;
+  private Set<CategoryDTO> categories;
   private String releaseDate;
-  private String genre;
   private String language;
   private String country;
   private String posterUrl;
+  private Float metacriticRating;
+  private Float imdbRating;
+  private Integer runtime;
 }

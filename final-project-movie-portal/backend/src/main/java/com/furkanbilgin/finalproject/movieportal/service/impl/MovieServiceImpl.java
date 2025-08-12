@@ -141,13 +141,13 @@ public class MovieServiceImpl implements MovieService {
       movie.setDirector(director);
     }
 
-    if (movieDTO.getCategoryIds() != null && !movieDTO.getCategoryIds().isEmpty()) {
+    if (movieDTO.getCategories() != null && !movieDTO.getCategories().isEmpty()) {
       var categories =
-          movieDTO.getCategoryIds().stream()
+          movieDTO.getCategories().stream()
               .map(
-                  catId ->
+                  cat ->
                       categoryRepository
-                          .findById(catId)
+                          .findById(cat.getId())
                           .orElseThrow(() -> new RuntimeException("Category not found")))
               .collect(Collectors.toSet());
       movie.setCategories(categories);
