@@ -25,8 +25,13 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Map<String, String>> handleGeneralExceptions(Exception ex) {
     var error = new HashMap<String, String>();
-    error.put("error", "An unexpected error occurred");
-    error.put("message", ex.getMessage());
-    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    error.put("error", ex.getMessage());
+    var status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+    var responseStatusAnnotation = ex.getClass().getAnnotation(ResponseStatus.class);
+    if (responseStatusAnnotation != null) {
+      status = responseStatusAnnotation.value();
+    }
+    return new ResponseEntity<>(error, status);
   }
 }
