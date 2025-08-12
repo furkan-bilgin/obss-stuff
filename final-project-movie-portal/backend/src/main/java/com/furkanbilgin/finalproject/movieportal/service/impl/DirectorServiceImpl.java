@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +30,13 @@ public class DirectorServiceImpl implements DirectorService {
   public List<DirectorDTO> getAllDirectors() {
     return directorRepository.findAll().stream()
         .map(director -> modelMapper.map(director, DirectorDTO.class))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<DirectorDTO> getAllDirectors(Pageable pageable) {
+    return directorRepository.findAll(pageable).stream()
+        .map((element) -> modelMapper.map(element, DirectorDTO.class))
         .collect(Collectors.toList());
   }
 

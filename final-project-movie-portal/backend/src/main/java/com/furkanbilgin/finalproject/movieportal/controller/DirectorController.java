@@ -4,6 +4,7 @@ import com.furkanbilgin.finalproject.movieportal.dto.director.DirectorDTO;
 import com.furkanbilgin.finalproject.movieportal.service.DirectorService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,8 +24,8 @@ public class DirectorController {
   }
 
   @GetMapping
-  public ResponseEntity<List<DirectorDTO>> getAllDirectors() {
-    List<DirectorDTO> directors = directorService.getAllDirectors();
+  public ResponseEntity<List<DirectorDTO>> getAllDirectors(Pageable pageable) {
+    var directors = directorService.getAllDirectors(pageable);
     return ResponseEntity.ok(directors);
   }
 

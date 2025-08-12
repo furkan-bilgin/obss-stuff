@@ -64,10 +64,10 @@ public class MovieServiceImpl implements MovieService {
   }
 
   private void updateMovieRelations(Movie movie, MovieDTO movieDTO) {
-    if (movieDTO.getDirectorId() != null) {
+    if (movieDTO.getDirector().getId() != null) {
       var director =
           directorRepository
-              .findById(movieDTO.getDirectorId())
+              .findById(movieDTO.getDirector().getId())
               .orElseThrow(() -> new RuntimeException("Director not found"));
       movie.setDirector(director);
     }

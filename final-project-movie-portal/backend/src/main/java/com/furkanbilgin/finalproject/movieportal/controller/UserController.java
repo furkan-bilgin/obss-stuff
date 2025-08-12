@@ -1,6 +1,8 @@
 package com.furkanbilgin.finalproject.movieportal.controller;
 
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieFavoriteDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieWatchlistDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.favorite.UserFavoriteMovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.favorite.UserUnfavoriteMovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.watchlist.UserUnwatchlistMovieDTO;
@@ -38,10 +40,27 @@ public class UserController {
     return ResponseEntity.ok(userService.findAllUsers());
   }
 
-  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("/{id}")
   public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
     return returnUserResponse(userService.findUserById(id));
+  }
+
+  @GetMapping("/{id}/watchlist")
+  public ResponseEntity<UserMovieWatchlistDTO> getUserWatchlist(@PathVariable Long id) {
+    var user = getCurrentUser();
+    if (!user.getId().equals(id)) { // TODO: add an option to toggle a public/private profile
+      throw new AccessDeniedException("Cannot access another user's watchlist");
+    }
+    return ResponseEntity.ok(userService.getUserWatchlist(id));
+  }
+
+  @GetMapping("/{id}/favorites")
+  public ResponseEntity<UserMovieFavoriteDTO> getUserFavorites(@PathVariable Long id) {
+    var user = getCurrentUser();
+    if (!user.getId().equals(id)) { // TODO: add an option to toggle a public/private profile
+      throw new AccessDeniedException("Cannot access another user's watchlist");
+    }
+    return ResponseEntity.ok(userService.getUserMovieFavorites(id));
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
