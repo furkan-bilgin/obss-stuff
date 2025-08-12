@@ -8,9 +8,9 @@ import {
 import './App.css';
 import Login from './lib/routes/Login';
 import { ProtectedRoute } from './lib/ProtectedRoute';
-import Home from './lib/routes/Home';
+import Home from './lib/routes/user/Home';
 import Header from './lib/Header';
-import Movie from './lib/routes/Movie';
+import Movie from './lib/routes/user/Movie';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,7 +21,9 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <Header />
-            <Outlet />
+            <div className="flex items-center justify-center min-h-screen bg-base-200">
+              <Outlet />
+            </div>
           </ProtectedRoute>
         }
       >
