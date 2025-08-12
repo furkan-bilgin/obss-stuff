@@ -12,7 +12,7 @@ export default function Login() {
       username,
       password,
     });
-    window.location.href = '/';
+    window.location.href = '/user';
   };
 
   return (
@@ -22,7 +22,7 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="label">
-              <span className="label-text">Email</span>
+              <span className="label-text">Username</span>
             </label>
             <input
               type="text"

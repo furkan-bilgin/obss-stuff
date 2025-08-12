@@ -16,6 +16,11 @@ export type UserFavoriteMovieDto = {
     score: number;
 };
 
+export type CategoryDto = {
+    id?: number;
+    name?: string;
+};
+
 export type DirectorDto = {
     id?: number;
     name?: string;
@@ -26,12 +31,18 @@ export type MovieDto = {
     title?: string;
     description?: string;
     director?: DirectorDto;
-    categoryIds?: Array<number>;
+    categories?: Array<CategoryDto>;
     releaseDate?: string;
-    genre?: string;
     language?: string;
     country?: string;
     posterUrl?: string;
+    metacriticRating?: number;
+    imdbRating?: number;
+    runtime?: number;
+};
+
+export type FetchTitlesResponseDto = {
+    titles?: Array<MovieDto>;
 };
 
 export type RegisterRequestDto = {
@@ -327,6 +338,22 @@ export type CreateMovieResponses = {
 };
 
 export type CreateMovieResponse = CreateMovieResponses[keyof CreateMovieResponses];
+
+export type FetchAndSaveTitlesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/imdb/fetch-titles';
+};
+
+export type FetchAndSaveTitlesResponses = {
+    /**
+     * OK
+     */
+    200: FetchTitlesResponseDto;
+};
+
+export type FetchAndSaveTitlesResponse = FetchAndSaveTitlesResponses[keyof FetchAndSaveTitlesResponses];
 
 export type GetAllDirectorsData = {
     body?: never;
