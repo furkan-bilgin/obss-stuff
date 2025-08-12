@@ -26,7 +26,7 @@ public interface UserService {
 
   Optional<UserDTO> deleteUser(Long id);
 
-  void favoriteMovie(Long id, Long movieId, Long score);
+  void favoriteMovie(Long id, Long movieId);
 
   void unfavoriteMovie(Long id, Long movieId);
 

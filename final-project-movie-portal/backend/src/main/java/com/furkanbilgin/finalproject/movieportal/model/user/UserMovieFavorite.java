@@ -19,6 +19,4 @@ public class UserMovieFavorite extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "movie_id")
   private Movie movie;
-
-  private Integer score;
 }

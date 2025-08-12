@@ -97,10 +97,7 @@ public class UserServiceImpl implements UserService {
     // TODO: add pagination
     var favorites =
         user.getFavorites().stream()
-            .map(
-                favorite ->
-                    new UserMovieFavoriteResponseDTO.MovieScorePairDTO(
-                        modelMapper.map(favorite.getMovie(), MovieDTO.class), favorite.getScore()))
+            .map(favorite -> modelMapper.map(favorite.getMovie(), MovieDTO.class))
             .toList();
     return new UserMovieFavoriteResponseDTO(modelMapper.map(user, UserDTO.class), favorites);
   }
@@ -133,21 +130,19 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void favoriteMovie(Long id, Long movieId, Long score) {
+  public void favoriteMovie(Long id, Long movieId) {
     var user = findUserByIdOrThrow(id);
     var movie = findMovieByIdOrThrow(movieId);
     var existingFavorite = userMovieFavoriteRepository.findByUserAndMovie(user, movie);
     if (existingFavorite.isPresent()) {
       // Update existing favorite score
       var favorite = existingFavorite.get();
-      favorite.setScore(score.intValue());
       userMovieFavoriteRepository.save(favorite);
       return;
     }
     var favorite = new UserMovieFavorite();
     favorite.setUser(user);
     favorite.setMovie(movie);
-    favorite.setScore(score.intValue());
 
     userMovieFavoriteRepository.save(favorite);
   }

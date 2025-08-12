@@ -92,10 +92,7 @@ public class UserController {
 
   @PutMapping("/movie/favorite")
   public void favoriteMovie(@Valid @RequestBody UserFavoriteMovieDTO userFavoriteMovieDTO) {
-    userService.favoriteMovie(
-        getCurrentUser().getId(),
-        userFavoriteMovieDTO.getMovieId(),
-        userFavoriteMovieDTO.getScore());
+    userService.favoriteMovie(getCurrentUser().getId(), userFavoriteMovieDTO.getMovieId());
   }
 
   @DeleteMapping("/movie/favorite")

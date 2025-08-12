@@ -11,12 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserMovieFavoriteResponseDTO {
   private UserDTO user;
-  private List<MovieScorePairDTO> favorites;
-
-  @Data
-  @AllArgsConstructor
-  public static class MovieScorePairDTO {
-    private MovieDTO movie;
-    private Integer score;
-  }
+  private List<MovieDTO> favorites;
 }
