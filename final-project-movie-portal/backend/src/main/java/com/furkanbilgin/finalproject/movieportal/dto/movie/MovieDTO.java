@@ -1,7 +1,7 @@
 package com.furkanbilgin.finalproject.movieportal.dto.movie;
 
 import com.furkanbilgin.finalproject.movieportal.dto.director.DirectorDTO;
-import java.util.Set;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ public class MovieDTO {
   private String title;
   private String description;
   private DirectorDTO director;
-  private Set<CategoryDTO> categories;
+  private List<CategoryDTO> categories;
   private String releaseDate;
   private String language;
   private String country;

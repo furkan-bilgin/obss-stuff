@@ -7,6 +7,7 @@ import com.furkanbilgin.finalproject.movieportal.dto.user.favorite.UserFavoriteM
 import com.furkanbilgin.finalproject.movieportal.dto.user.favorite.UserUnfavoriteMovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.watchlist.UserUnwatchlistMovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.watchlist.UserWatchlistMovieDTO;
+import com.furkanbilgin.finalproject.movieportal.exception.UserNotFoundException;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -50,22 +51,24 @@ public class UserController {
     return returnUserResponse(userService.findUserByUsername(username));
   }
 
-  @GetMapping("/{id}/watchlist")
-  public ResponseEntity<UserMovieWatchlistResponseDTO> getUserWatchlist(@PathVariable Long id) {
-    var user = getCurrentUser();
-    if (!user.getId().equals(id)) { // TODO: add an option to toggle a public/private profile
-      throw new AccessDeniedException("Cannot access another user's watchlist");
+  @GetMapping("/username/{username}/watchlist")
+  public ResponseEntity<UserMovieWatchlistResponseDTO> getUserWatchlist(
+      @PathVariable String username) {
+    var user = userService.findUserByUsername(username);
+    if (user.isEmpty()) {
+      throw new UserNotFoundException("User not found");
     }
-    return ResponseEntity.ok(userService.getUserWatchlist(id));
+    return ResponseEntity.ok(userService.getUserWatchlist(user.get().getId()));
   }
 
-  @GetMapping("/{id}/favorites")
-  public ResponseEntity<UserMovieFavoriteResponseDTO> getUserFavorites(@PathVariable Long id) {
-    var user = getCurrentUser();
-    if (!user.getId().equals(id)) { // TODO: add an option to toggle a public/private profile
-      throw new AccessDeniedException("Cannot access another user's watchlist");
+  @GetMapping("/username/{username}/favorites")
+  public ResponseEntity<UserMovieFavoriteResponseDTO> getUserFavorites(
+      @PathVariable String username) {
+    var user = userService.findUserByUsername(username);
+    if (user.isEmpty()) {
+      throw new UserNotFoundException("User not found");
     }
-    return ResponseEntity.ok(userService.getUserMovieFavorites(id));
+    return ResponseEntity.ok(userService.getUserMovieFavorites(user.get().getId()));
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")

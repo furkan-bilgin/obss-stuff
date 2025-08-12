@@ -94,6 +94,7 @@ public class UserServiceImpl implements UserService {
   public UserMovieFavoriteResponseDTO getUserMovieFavorites(Long id) {
     var user = findUserByIdOrThrow(id);
     // TODO: n+1?
+    // TODO: add pagination
     var favorites =
         user.getFavorites().stream()
             .map(
@@ -108,6 +109,7 @@ public class UserServiceImpl implements UserService {
   public UserMovieWatchlistResponseDTO getUserWatchlist(Long id) {
     var user = findUserByIdOrThrow(id);
     // TODO: n+1?
+    // TODO: add pagination
     var watchlist =
         user.getWatchlist().stream()
             .map(watchlistItem -> modelMapper.map(watchlistItem.getMovie(), MovieDTO.class))

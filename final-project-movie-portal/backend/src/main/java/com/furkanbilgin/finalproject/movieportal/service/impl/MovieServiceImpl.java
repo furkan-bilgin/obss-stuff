@@ -85,7 +85,7 @@ public class MovieServiceImpl implements MovieService {
                                 newCategory.setName(genreName);
                                 return categoryRepository.save(newCategory);
                               }))
-              .collect(Collectors.toSet());
+              .collect(Collectors.toList());
       movie.setCategories(categories);
     }
 
@@ -149,7 +149,7 @@ public class MovieServiceImpl implements MovieService {
                       categoryRepository
                           .findById(cat.getId())
                           .orElseThrow(() -> new RuntimeException("Category not found")))
-              .collect(Collectors.toSet());
+              .collect(Collectors.toList());
       movie.setCategories(categories);
     }
   }
