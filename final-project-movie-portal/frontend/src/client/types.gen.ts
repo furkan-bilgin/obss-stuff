@@ -306,6 +306,58 @@ export type UpdateDirectorResponses = {
 
 export type UpdateDirectorResponse = UpdateDirectorResponses[keyof UpdateDirectorResponses];
 
+export type DeleteCategoryData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/categories/{id}';
+};
+
+export type DeleteCategoryResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
+export type GetCategoryByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/categories/{id}';
+};
+
+export type GetCategoryByIdResponses = {
+    /**
+     * OK
+     */
+    200: CategoryDto;
+};
+
+export type GetCategoryByIdResponse = GetCategoryByIdResponses[keyof GetCategoryByIdResponses];
+
+export type UpdateCategoryData = {
+    body: CategoryDto;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/categories/{id}';
+};
+
+export type UpdateCategoryResponses = {
+    /**
+     * OK
+     */
+    200: CategoryDto;
+};
+
+export type UpdateCategoryResponse = UpdateCategoryResponses[keyof UpdateCategoryResponses];
+
 export type GetAllMoviesData = {
     body?: never;
     path?: never;
@@ -387,6 +439,40 @@ export type CreateDirectorResponses = {
 };
 
 export type CreateDirectorResponse = CreateDirectorResponses[keyof CreateDirectorResponses];
+
+export type GetAllCategoriesData = {
+    body?: never;
+    path?: never;
+    query: {
+        pageable: Pageable;
+    };
+    url: '/categories';
+};
+
+export type GetAllCategoriesResponses = {
+    /**
+     * OK
+     */
+    200: Array<CategoryDto>;
+};
+
+export type GetAllCategoriesResponse = GetAllCategoriesResponses[keyof GetAllCategoriesResponses];
+
+export type CreateCategoryData = {
+    body: CategoryDto;
+    path?: never;
+    query?: never;
+    url: '/categories';
+};
+
+export type CreateCategoryResponses = {
+    /**
+     * OK
+     */
+    200: CategoryDto;
+};
+
+export type CreateCategoryResponse = CreateCategoryResponses[keyof CreateCategoryResponses];
 
 export type RegisterData = {
     body: RegisterRequestDto;
