@@ -22,8 +22,14 @@ const NavbarLink = ({
   children: string;
 }) => {
   return (
-    <li>
-      <NavLink to={to} className={({ isActive }) => (isActive ? 'active' : '')}>
+    <li className="mb-1">
+      <NavLink
+        to={to}
+        className={({ isActive }) =>
+          isActive ? 'bg-base-100 text-base-content' : ''
+        }
+        end={true}
+      >
         {React.createElement(icon)}
         {children}
       </NavLink>
