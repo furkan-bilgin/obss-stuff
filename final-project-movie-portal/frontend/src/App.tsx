@@ -17,6 +17,7 @@ import { AdminBaseTemplate } from './lib/admin/BaseTemplate';
 import { AdminMovie } from './routes/admin/AdminMovie';
 import { AdminDirector } from './routes/admin/AdminDirector';
 import { AdminCategory } from './routes/admin/AdminCategory';
+import { AdminUser } from './routes/admin/AdminUser';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -48,6 +49,7 @@ const router = createBrowserRouter(
         }
       >
         <Route index element={<AdminHome />} />
+        <Route path="users" element={<AdminUser />} />
         <Route path="movies" element={<AdminMovie />} />
         <Route path="directors" element={<AdminDirector />} />
         <Route path="categories" element={<AdminCategory />} />

@@ -24,8 +24,10 @@ interface FieldDataFetchOptions {
 type CRUDField<T extends Entity> = {
   name: string;
   label: string;
-  type: 'text' | 'textarea' | 'number' | 'dropdown';
-  dataFetcher?: (options: FieldDataFetchOptions) => Promise<T[] | undefined>;
+  type: 'text' | 'textarea' | 'number' | 'dropdown' | 'email' | 'multiselect';
+  dataFetcher?: (
+    options: FieldDataFetchOptions
+  ) => Promise<unknown[] | undefined>;
   dataTransformer?: (form: EntityForm) => T;
   required?: boolean;
 };
@@ -145,7 +147,7 @@ const GenericForm = <T extends Entity>({
               name: field.name.toString(),
             });
             if (data) {
-              setFieldData((prev) => ({ ...prev, [field.name]: data }));
+              setFieldData((prev) => ({ ...prev, [field.name]: data as T[] }));
             }
           }
         }
@@ -222,21 +224,46 @@ const GenericForm = <T extends Entity>({
     return (
       <ReactSelect
         name={field.name}
-        onChange={(selectedOption) =>
-          // TODO: this should also use handleChange
+        onChange={(selectedOption) => {
+          // Selected option can be 1. option 2. multiselect options or 3. null because
+          // if nothing is selected ReactSelect returns an empty string
+          let value: Entity | Entity[] | null = selectedOption ?? null;
+          if (Array.isArray(selectedOption)) {
+            value = selectedOption.map((option) => option.value);
+          } else if (
+            // Be absolutely sure that the option is an object with a value property
+            selectedOption &&
+            typeof selectedOption === 'object' &&
+            'value' in selectedOption
+          ) {
+            value = selectedOption.value;
+          }
+          // Should not setEntity directly (because handleChange exists)
+          // but I don't have enough time :'(
           setEntity((prev) => ({
             ...prev,
-            [field.name]: selectedOption ? selectedOption.value : '',
-          }))
+            [field.name]: value,
+          }));
+        }}
+        defaultValue={
+          field.type === 'dropdown'
+            ? // If it's a dropdown, get the option with the same id as the field object's id
+              options?.find(
+                (option) => option.value.id === entity[field.name]?.id
+              )
+            : // Else, get the options with the same id as the field object's id
+              options?.filter((option) =>
+                entity[field.name]
+                  ?.map((val: T) => val.id)
+                  .includes(option.value.id)
+              )
         }
-        defaultValue={null}
-        value={options?.find(
-          (option) => option.value?.id === entity[field.name]?.id
-        )}
         options={options || []}
         isClearable={!field.required}
+        isMulti={field.type === 'multiselect'}
         placeholder={`Select ${field.label}...`}
         styles={{
+          // Black theme
           control: (provided) => ({
             ...provided,
             backgroundColor: 'var(--color-base-100)',
@@ -269,6 +296,15 @@ const GenericForm = <T extends Entity>({
             ...provided,
             color: '#aaa',
           }),
+          multiValue: (provided) => ({
+            ...provided,
+            backgroundColor: '#444',
+            color: '#fff',
+          }),
+          multiValueLabel: (provided) => ({
+            ...provided,
+            color: '#fff',
+          }),
         }}
       />
     );
@@ -292,7 +328,7 @@ const GenericForm = <T extends Entity>({
               className="textarea textarea-bordered w-full"
               required={field.required}
             />
-          ) : field.type === 'dropdown' ? (
+          ) : field.type === 'dropdown' || field.type === 'multiselect' ? (
             selectField(field)
           ) : (
             <input
