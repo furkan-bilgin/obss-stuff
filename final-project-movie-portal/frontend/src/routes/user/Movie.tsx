@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { type MovieDto } from '../../client';
-import { apiClient } from '../../api';
+import { api } from '../../api';
 import { FaStar } from 'react-icons/fa';
 import { BiCalendar, BiTime } from 'react-icons/bi';
 import {
@@ -28,8 +28,7 @@ export const Movie = () => {
     const fetchData = async () => {
       try {
         if (!id) throw new Error('Movie ID is missing.');
-        const movieRes = await apiClient.getMovieById(parseInt(id));
-        setMovie(movieRes.data ?? null);
+        setMovie(await api.movieService.getById(parseInt(id)));
       } catch (err) {
         console.error(err);
         if (err instanceof Error) {
@@ -107,9 +106,12 @@ export const Movie = () => {
           {userData.watchlist?.find((watch) => watch.id === movie.id) ? (
             <button
               className="btn btn-outline btn-primary"
-              onClick={() =>
-                apiClient.removeMovieFromWatchlist(movie.id as number)
-              }
+              onClick={async () => {
+                await api.userService.removeMovieFromWatchlist(
+                  movie.id as number
+                );
+                await api.refreshUser();
+              }}
             >
               <MdOutlinePlaylistRemove />
               Remove from Watchlist
@@ -117,7 +119,10 @@ export const Movie = () => {
           ) : (
             <button
               className="btn btn-primary"
-              onClick={() => apiClient.addMovieToWatchlist(movie.id as number)}
+              onClick={async () => {
+                await api.userService.addMovieToWatchlist(movie.id as number);
+                await api.refreshUser();
+              }}
             >
               <MdOutlinePlaylistAdd />
               Add to Watchlist
@@ -126,7 +131,10 @@ export const Movie = () => {
           {userData.favorites?.find((fav) => fav?.id === movie.id) ? (
             <button
               className="btn btn-outline btn-secondary"
-              onClick={() => apiClient.unfavoriteMovie(movie.id as number)}
+              onClick={async () => {
+                await api.userService.unfavoriteMovie(movie.id as number);
+                await api.refreshUser();
+              }}
             >
               <IoHeart size={20} />
               Remove from Favorites
@@ -134,7 +142,10 @@ export const Movie = () => {
           ) : (
             <button
               className="btn btn-secondary"
-              onClick={() => apiClient.favoriteMovie(movie.id as number, 1)}
+              onClick={async () => {
+                await api.userService.favoriteMovie(movie.id as number);
+                await api.refreshUser();
+              }}
             >
               <IoHeartOutline size={20} />
               Add to Favorites

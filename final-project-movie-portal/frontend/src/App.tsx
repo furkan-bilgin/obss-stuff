@@ -18,6 +18,7 @@ import { AdminMovie } from './routes/admin/AdminMovie';
 import { AdminDirector } from './routes/admin/AdminDirector';
 import { AdminCategory } from './routes/admin/AdminCategory';
 import { AdminUser } from './routes/admin/AdminUser';
+import { api } from './api';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -59,6 +60,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  api.init();
   return <RouterProvider router={router} />;
 }
 

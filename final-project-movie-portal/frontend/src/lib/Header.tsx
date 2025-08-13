@@ -1,9 +1,9 @@
 import { FaUser } from 'react-icons/fa';
 import { FiLogOut, FiSettings } from 'react-icons/fi';
 import { MdAdminPanelSettings, MdLocalMovies } from 'react-icons/md';
-import { apiClient } from '../api';
 import { Link } from 'react-router-dom';
 import { useUserStore } from '../state/user';
+import { api } from '../api/index';
 
 export const Header = () => {
   return (
@@ -54,7 +54,7 @@ export const Header = () => {
             <li>
               <a
                 onClick={() => {
-                  apiClient.logout();
+                  api.logout();
                   window.location.reload();
                 }}
               >

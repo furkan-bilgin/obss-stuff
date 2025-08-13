@@ -1,13 +1,7 @@
-import { apiClient } from '../../api';
+import { api } from '../../api';
 import type { UserDto } from '../../client/types.gen';
 import { GenericCRUD, type CRUDConfig } from '../../lib/admin/GenericCRUD';
-import {
-  getAllUsers,
-  getUserById,
-  updateUser,
-  deleteUser,
-  getAllRoles,
-} from '../../client/sdk.gen';
+// ...existing code...
 
 const userConfig: CRUDConfig<UserDto> = {
   entityName: 'User',
@@ -16,29 +10,12 @@ const userConfig: CRUDConfig<UserDto> = {
     email: '',
     roles: [],
   },
-  getAll: async () => {
-    const res = await getAllUsers({
-      client: apiClient.client,
-    });
-    return res.data ?? [];
-  },
+  getAll: api.userService.getAll,
   getById: async (id: number) => {
-    const res = await getUserById({
-      path: { id },
-      client: apiClient.client,
-    });
-    return res.data ?? userConfig.initialEntity;
+    return (await api.userService.getById(id)) ?? userConfig.initialEntity;
   },
-  update: async (id: number, entity: UserDto) => {
-    await updateUser({
-      path: { id },
-      body: entity,
-      client: apiClient.client,
-    });
-  },
-  delete: async (id: number) => {
-    await deleteUser({ path: { id }, client: apiClient.client });
-  },
+  update: api.userService.update,
+  delete: api.userService.delete,
   create: async () => {}, // they should register instead
   fields: [
     { name: 'username', label: 'Username', type: 'text', required: true },
@@ -48,12 +25,7 @@ const userConfig: CRUDConfig<UserDto> = {
       label: 'Roles',
       type: 'multiselect',
       required: true,
-      dataFetcher: async () => {
-        const res = await getAllRoles({
-          client: apiClient.client,
-        });
-        return res.data ?? [];
-      },
+      dataFetcher: api.userService.getAllRoles,
     },
   ],
   tableColumns: [
@@ -61,9 +33,13 @@ const userConfig: CRUDConfig<UserDto> = {
     { header: 'Email', render: (user) => user.email },
     {
       header: 'Roles',
-      render: (user) => user.roles?.map((role) => role.name).join(', '),
+      render: (user) =>
+        user.roles?.map((role) => (
+          <div className="badge badge-outline me-2">{role.name}</div>
+        )),
     },
   ],
+  canCreate: false, // they SHOULD register
 };
 
 export const AdminUser = () => <GenericCRUD config={userConfig} />;

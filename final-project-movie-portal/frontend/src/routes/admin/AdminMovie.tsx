@@ -1,15 +1,7 @@
 import { FaStar } from 'react-icons/fa';
-import { apiClient } from '../../api';
-import {
-  getAllMovies,
-  getMovieById,
-  createMovie,
-  updateMovie,
-  deleteMovie,
-  getAllDirectors,
-} from '../../client/sdk.gen';
 import type { MovieDto } from '../../client/types.gen';
 import { GenericCRUD, type CRUDConfig } from '../../lib/admin/GenericCRUD';
+import { api } from '../../api';
 
 const movieConfig: CRUDConfig<MovieDto> = {
   entityName: 'Movie',
@@ -26,23 +18,13 @@ const movieConfig: CRUDConfig<MovieDto> = {
     imdbRating: undefined,
     runtime: 0,
   },
-  getAll: async () => {
-    const res = await getAllMovies({ client: apiClient.client });
-    return res.data ?? [];
-  },
+  getAll: api.movieService.getAll,
   getById: async (id: number) => {
-    const res = await getMovieById({ path: { id }, client: apiClient.client });
-    return res.data ?? movieConfig.initialEntity;
+    return (await api.movieService.getById(id)) ?? movieConfig.initialEntity;
   },
-  create: async (entity: MovieDto) => {
-    await createMovie({ body: entity, client: apiClient.client });
-  },
-  update: async (id: number, entity: MovieDto) => {
-    await updateMovie({ path: { id }, body: entity, client: apiClient.client });
-  },
-  delete: async (id: number) => {
-    await deleteMovie({ path: { id }, client: apiClient.client });
-  },
+  create: api.movieService.create,
+  update: api.movieService.update,
+  delete: api.movieService.delete,
   fields: [
     { name: 'title', label: 'Title', type: 'text', required: true },
     { name: 'description', label: 'Description', type: 'textarea' },
@@ -50,13 +32,7 @@ const movieConfig: CRUDConfig<MovieDto> = {
       name: 'director',
       label: 'Director',
       type: 'dropdown',
-      dataFetcher: async () =>
-        (
-          await getAllDirectors({
-            client: apiClient.client,
-            query: { pageable: {} },
-          })
-        ).data,
+      dataFetcher: api.movieService.getAll,
     },
     { name: 'releaseDate', label: 'Release Date', type: 'text' },
     { name: 'language', label: 'Language', type: 'text' },

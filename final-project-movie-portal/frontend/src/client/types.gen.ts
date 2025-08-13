@@ -18,7 +18,6 @@ export type UserWatchlistMovieDto = {
 
 export type UserFavoriteMovieDto = {
     movieId: number;
-    score: number;
 };
 
 export type CategoryDto = {

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import type { MovieDto, UserDto } from '../../client';
-import { apiClient } from '../../api';
+import { api } from '../../api';
 import { useEffect, useState } from 'react';
 import { MovieCard } from '../../lib/user/MovieCard';
 import { IoHeart } from 'react-icons/io5';
@@ -51,13 +51,13 @@ export const Profile = () => {
     const fetchData = async () => {
       try {
         const [userRes, watchlistRes, favoritesRes] = await Promise.all([
-          apiClient.getUserByUsername(username ?? ''),
-          apiClient.getWatchlistByUsername(username ?? ''),
-          apiClient.getFavoritesByUsername(username ?? ''),
+          api.userService.getByUsername(username ?? ''),
+          api.userService.getWatchlistByUsername(username ?? ''),
+          api.userService.getFavoritesByUsername(username ?? ''),
         ]);
-        setUser(userRes.data ?? null);
-        setWatchlist(watchlistRes.data?.watchlist ?? []);
-        setFavorites(favoritesRes.data?.favorites ?? []);
+        setUser(userRes);
+        setWatchlist(watchlistRes);
+        setFavorites(favoritesRes);
       } catch (err) {
         console.error(err);
         if (err instanceof Error) {

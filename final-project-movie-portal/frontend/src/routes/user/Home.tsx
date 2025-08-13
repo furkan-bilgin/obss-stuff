@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { type MovieDto } from '../../client';
-import { apiClient } from '../../api';
+import { api } from '../../api';
 import { MovieCard } from '../../lib/user/MovieCard';
 import { ErrorMessage } from '../../lib/ErrorMessage';
 import { LoadingSpinner } from '../../lib/LoadingSpinner';
@@ -12,7 +12,7 @@ export const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setMovies((await apiClient.getAllMovies()).data ?? []);
+        setMovies(await api.movieService.getAll());
       } catch (err) {
         console.error(err);
         if (err instanceof Error) {
@@ -31,7 +31,7 @@ export const Home = () => {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {movies.map((movie) => (
-        <MovieCard movie={movie} />
+        <MovieCard key={movie.id} movie={movie} />
       ))}
     </div>
   );

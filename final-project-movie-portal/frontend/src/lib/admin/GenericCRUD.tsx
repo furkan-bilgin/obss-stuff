@@ -45,6 +45,7 @@ export interface CRUDConfig<T extends Entity> {
     header: string;
     render: (entity: T) => React.ReactNode;
   }[];
+  canCreate?: boolean;
 }
 
 const GenericList = <T extends Entity>({
@@ -380,13 +381,18 @@ export const GenericCRUD = <T extends Entity>({
   };
 
   return (
-    <div className="p-4">
+    <div>
       {!showForm && (
         <>
-          <button className="btn btn-success mb-4" onClick={handleAdd}>
-            <FaPlus />
-            Add {config.entityName}
-          </button>
+          <div className="flex w-full items-center justify-between mb-2">
+            <h2 className="text-2xl">{config.entityName} List</h2>
+            {config.canCreate !== false && (
+              <button className="btn btn-sm btn-success" onClick={handleAdd}>
+                <FaPlus />
+                Add {config.entityName}
+              </button>
+            )}
+          </div>
           <GenericList
             key={refreshKey}
             config={config}
