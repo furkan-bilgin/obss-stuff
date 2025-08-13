@@ -1,6 +1,7 @@
 import {
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
   Outlet,
   Route,
   RouterProvider,
@@ -19,11 +20,15 @@ import { AdminDirector } from './routes/admin/AdminDirector';
 import { AdminCategory } from './routes/admin/AdminCategory';
 import { AdminUser } from './routes/admin/AdminUser';
 import { api } from './api';
+import { AdminFetchIMDb } from './routes/admin/AdminFetchIMDb';
+import { Register } from './routes/Register';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
+      <Route index element={<Navigate to="/login" />} />
       <Route path="login" element={<Login />} />
+      <Route path="register" element={<Register />} />
       <Route
         path="user"
         element={
@@ -54,6 +59,7 @@ const router = createBrowserRouter(
         <Route path="movies" element={<AdminMovie />} />
         <Route path="directors" element={<AdminDirector />} />
         <Route path="categories" element={<AdminCategory />} />
+        <Route path="fetch-imdb" element={<AdminFetchIMDb />} />
       </Route>
     </Route>
   )

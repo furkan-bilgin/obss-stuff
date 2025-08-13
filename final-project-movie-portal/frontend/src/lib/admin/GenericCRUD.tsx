@@ -3,6 +3,7 @@ import { ErrorMessage } from '../ErrorMessage';
 import { LoadingSpinner } from '../LoadingSpinner';
 import ReactSelect from 'react-select';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { RxValueNone } from 'react-icons/rx';
 
 interface Entity {
   id?: number;
@@ -93,6 +94,19 @@ const GenericList = <T extends Entity>({
         </tr>
       </thead>
       <tbody>
+        {entities.length === 0 && (
+          <tr>
+            <td
+              colSpan={config.tableColumns.length + 1}
+              className="text-center"
+            >
+              <div className="flex flex-row items-center justify-center gap-2">
+                <RxValueNone />
+                <span>No records found.</span>
+              </div>
+            </td>
+          </tr>
+        )}
         {entities.map((entity) => (
           <tr key={entity.id}>
             {config.tableColumns.map((col) => (

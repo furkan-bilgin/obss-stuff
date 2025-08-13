@@ -9,6 +9,7 @@ import {
   directorService,
   type DirectorService,
 } from './services/directorService';
+import { imdbService, type IMDBService } from './services/imdbService';
 import { movieService, type MovieService } from './services/movieService';
 import { userService, type UserService } from './services/userService';
 
@@ -18,8 +19,15 @@ interface APIClientInterface {
   directorService: DirectorService;
   movieService: MovieService;
   userService: UserService;
+  imdbService: IMDBService;
+
   init: () => void;
   login: (username: string, password: string) => Promise<void>;
+  register: (
+    username: string,
+    password: string,
+    email: string
+  ) => Promise<void>;
   logout: () => void;
   setClientToken: (token: string | null) => void;
   refreshUser: () => Promise<void>;
@@ -36,6 +44,7 @@ export const api: APIClientInterface = {
   directorService: directorService,
   movieService: movieService,
   userService: userService,
+  imdbService: imdbService,
   init: () => {
     api.setClientToken(useUserStore.getState().token);
     api.refreshUser();
@@ -56,6 +65,19 @@ export const api: APIClientInterface = {
     } catch (error) {
       useUserStore.setState({ user: null, token: null });
       console.error('Login failed:', error);
+      throw error;
+    }
+  },
+  register: async (username: string, password: string, email: string) => {
+    try {
+      await restClient.register({
+        client: api.client,
+        body: { username, password, email },
+      });
+      await api.login(username, password);
+    } catch (error) {
+      useUserStore.setState({ user: null, token: null });
+      console.error('Register failed:', error);
       throw error;
     }
   },

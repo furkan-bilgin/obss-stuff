@@ -11,6 +11,7 @@ import {
   BiUser,
 } from 'react-icons/bi';
 import { TbChairDirector } from 'react-icons/tb';
+import { FaImdb } from 'react-icons/fa';
 
 const NavbarLink = ({
   to,
@@ -57,6 +58,9 @@ export const AdminBaseTemplate = (props: PropsWithChildren) => {
       </NavbarLink>
       <NavbarLink to="/admin/categories" icon={BiCategory}>
         Categories
+      </NavbarLink>
+      <NavbarLink to="/admin/fetch-imdb" icon={FaImdb}>
+        Fetch IMDB Titles
       </NavbarLink>
       <div className="divider"></div>
       <NavbarLink to="/user" icon={BiLeftArrowAlt}>
