@@ -3,6 +3,7 @@ package com.furkanbilgin.finalproject.movieportal.model.user;
 import com.furkanbilgin.finalproject.movieportal.model.BaseEntity;
 import com.furkanbilgin.finalproject.movieportal.model.Role;
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -36,14 +37,14 @@ public class User extends BaseEntity implements UserDetails {
       cascade = CascadeType.ALL,
       orphanRemoval = true,
       fetch = FetchType.LAZY)
-  private Set<UserMovieFavorite> favorites = new HashSet<>();
+  private List<UserMovieFavorite> favorites = new ArrayList<>();
 
   @OneToMany(
       mappedBy = "user",
       cascade = CascadeType.ALL,
       orphanRemoval = true,
       fetch = FetchType.LAZY)
-  private Set<UserMovieWatchlist> watchlist = new HashSet<>();
+  private List<UserMovieWatchlist> watchlist = new ArrayList<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

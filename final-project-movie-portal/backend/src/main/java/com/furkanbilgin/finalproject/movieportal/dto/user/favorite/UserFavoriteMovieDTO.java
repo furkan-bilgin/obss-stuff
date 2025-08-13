@@ -7,7 +7,5 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserFavoriteMovieDTO {
-  @NotNull
-  private Long movieId;
-  @NotNull private Long score;
+  @NotNull private Long movieId;
 }
