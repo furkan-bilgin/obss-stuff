@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 import { Header } from '../../lib/Header';
 import type { IconType } from 'react-icons';
 import React from 'react';
@@ -12,6 +12,7 @@ import {
 } from 'react-icons/bi';
 import { TbChairDirector } from 'react-icons/tb';
 import { FaImdb } from 'react-icons/fa';
+import { Link } from '../Link';
 
 const NavbarLink = ({
   to,
@@ -22,18 +23,13 @@ const NavbarLink = ({
   icon: IconType;
   children: string;
 }) => {
+  const isActive = useMatch({ path: to, end: true });
   return (
     <li className="mb-1">
-      <NavLink
-        to={to}
-        className={({ isActive }) =>
-          isActive ? 'bg-base-100 text-base-content' : ''
-        }
-        end={true}
-      >
+      <Link to={to} className={isActive ? 'bg-base-100 text-base-content' : ''}>
         {React.createElement(icon)}
         {children}
-      </NavLink>
+      </Link>
     </li>
   );
 };
