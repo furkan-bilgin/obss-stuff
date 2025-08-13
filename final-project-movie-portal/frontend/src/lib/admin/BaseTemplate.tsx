@@ -37,7 +37,7 @@ const NavbarLink = ({
   );
 };
 
-const AdminBaseTemplate = (props: PropsWithChildren) => {
+export const AdminBaseTemplate = (props: PropsWithChildren) => {
   const sidebarContent = (
     <>
       <li className="menu-title px-4">
@@ -88,5 +88,3 @@ const AdminBaseTemplate = (props: PropsWithChildren) => {
     </div>
   );
 };
-
-export default AdminBaseTemplate;
