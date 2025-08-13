@@ -133,7 +133,9 @@ public class MovieServiceImpl implements MovieService {
   }
 
   private void updateMovieRelations(Movie movie, MovieDTO movieDTO) {
-    if (movieDTO.getDirector().getId() != null) {
+    if (movieDTO.getDirector() == null) {
+      movie.setDirector(null);
+    } else if (movieDTO.getDirector().getId() != null) {
       var director =
           directorRepository
               .findById(movieDTO.getDirector().getId())
