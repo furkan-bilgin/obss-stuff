@@ -11,12 +11,14 @@ import com.furkanbilgin.finalproject.movieportal.model.user.User;
 import com.furkanbilgin.finalproject.movieportal.model.user.UserMovieFavorite;
 import com.furkanbilgin.finalproject.movieportal.model.user.UserMovieWatchlist;
 import com.furkanbilgin.finalproject.movieportal.repository.MovieRepository;
+import com.furkanbilgin.finalproject.movieportal.repository.RoleRepository;
 import com.furkanbilgin.finalproject.movieportal.repository.UserMovieFavoriteRepository;
 import com.furkanbilgin.finalproject.movieportal.repository.UserMovieWatchlistRepository;
 import com.furkanbilgin.finalproject.movieportal.repository.UserRepository;
 import com.furkanbilgin.finalproject.movieportal.service.JWTService;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
@@ -34,6 +36,7 @@ public class UserServiceImpl implements UserService {
   private final MovieRepository movieRepository;
   private final UserMovieFavoriteRepository userMovieFavoriteRepository;
   private final UserMovieWatchlistRepository userMovieWatchlistRepository;
+  private final RoleRepository roleRepository;
 
   @Autowired
   public UserServiceImpl(
@@ -44,7 +47,8 @@ public class UserServiceImpl implements UserService {
       PasswordHasher passwordHasher,
       MovieRepository movieRepository,
       UserMovieFavoriteRepository userMovieFavoriteRepository,
-      UserMovieWatchlistRepository userMovieWatchlistRepository) {
+      UserMovieWatchlistRepository userMovieWatchlistRepository,
+      RoleRepository roleRepository) {
     this.userRepository = userRepository;
     this.modelMapper = modelMapper;
     this.jwtService = jwtService;
@@ -53,6 +57,7 @@ public class UserServiceImpl implements UserService {
     this.movieRepository = movieRepository;
     this.userMovieFavoriteRepository = userMovieFavoriteRepository;
     this.userMovieWatchlistRepository = userMovieWatchlistRepository;
+    this.roleRepository = roleRepository;
   }
 
   public UserDTO saveUser(RegisterRequestDTO registerUserDTO) {
@@ -85,7 +90,23 @@ public class UserServiceImpl implements UserService {
       var user = userOpt.get();
       user.setUsername(userDTO.getUsername());
       user.setEmail(userDTO.getEmail());
-      return Optional.of(modelMapper.map(user, UserDTO.class));
+      if (user.getRoles() != null) {
+        var newRoles =
+            new ArrayList<>(userDTO.getRoles())
+                .stream()
+                    .map(
+                        roleDTO ->
+                            roleRepository
+                                .findById(roleDTO.getId())
+                                .orElseThrow(
+                                    () ->
+                                        new EntityNotFoundException(
+                                            "Role not found: " + roleDTO.getName())))
+                    .toList();
+        user.getRoles().clear();
+        user.getRoles().addAll(newRoles);
+      }
+      return Optional.of(modelMapper.map(userRepository.save(user), UserDTO.class));
     }
     return Optional.empty();
   }
