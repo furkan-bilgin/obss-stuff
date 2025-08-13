@@ -1,3 +1,3 @@
 export const AdminHome = () => {
-  return <h1>Hello</h1>;
+  return <span>Hello! This is the admin panel!!</span>;
 };

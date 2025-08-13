@@ -32,7 +32,7 @@ const movieConfig: CRUDConfig<MovieDto> = {
       name: 'director',
       label: 'Director',
       type: 'dropdown',
-      dataFetcher: api.movieService.getAll,
+      dataFetcher: api.directorService.getAll,
     },
     { name: 'releaseDate', label: 'Release Date', type: 'text' },
     { name: 'language', label: 'Language', type: 'text' },

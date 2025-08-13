@@ -47,7 +47,7 @@ const router = createBrowserRouter(
       <Route
         path="admin"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute neededRoles={['ADMIN']}>
             <AdminBaseTemplate>
               <Outlet />
             </AdminBaseTemplate>
