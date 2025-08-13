@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CommentDTO {
+  private Long id;
   private UserDTO user;
   private MovieDTO movie;
   private List<CommentDTO> children;
