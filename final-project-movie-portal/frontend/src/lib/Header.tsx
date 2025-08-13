@@ -1,6 +1,6 @@
 import { FaUser } from 'react-icons/fa';
 import { FiLogOut, FiSettings } from 'react-icons/fi';
-import { MdLocalMovies } from 'react-icons/md';
+import { MdAdminPanelSettings, MdLocalMovies } from 'react-icons/md';
 import { apiClient } from '../api';
 import { Link } from 'react-router-dom';
 import { useUserStore } from '../state/user';
@@ -35,6 +35,16 @@ export const Header = () => {
                 Profile
               </Link>
             </li>
+            {useUserStore
+              .getState()
+              .user?.roles?.map((role) => role.name === 'ADMIN') ? (
+              <li>
+                <Link to="/admin">
+                  <MdAdminPanelSettings />
+                  Admin Panel
+                </Link>
+              </li>
+            ) : null}
             <li>
               <a>
                 <FiSettings />
