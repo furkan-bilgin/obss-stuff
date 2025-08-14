@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import type { MovieDto, UserDto } from '../../client';
 import { api } from '../../api';
 import { useEffect, useState } from 'react';
-import { MovieCard } from '../../lib/user/MovieCard';
+import { MovieCard } from '../../lib/movie/MovieCard';
 import { IoHeart } from 'react-icons/io5';
 import { CiBoxList } from 'react-icons/ci';
 import { FaUser } from 'react-icons/fa';

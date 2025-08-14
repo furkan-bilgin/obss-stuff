@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../../api';
 import { useParams } from 'react-router-dom';
 import type { MovieDto } from '../../client';
-import { MovieCard } from '../../lib/user/MovieCard';
+import { MovieCard } from '../../lib/movie/MovieCard';
 import { LoadingSpinner } from '../../lib/LoadingSpinner';
 
 export const Search = () => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { type MovieDto } from '../../client';
 import { api } from '../../api';
-import { MovieCard } from '../../lib/user/MovieCard';
+import { MovieCard } from '../../lib/movie/MovieCard';
 import { ErrorMessage } from '../../lib/ErrorMessage';
 import { LoadingSpinner } from '../../lib/LoadingSpinner';
 

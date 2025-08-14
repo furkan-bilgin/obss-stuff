@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { api } from '../../../api';
-import type { CommentDto } from '../../../client';
+import { api } from '../../api';
+import type { CommentDto } from '../../client';
 import { BiComment } from 'react-icons/bi';
 
 export const SocialCommentForm = ({

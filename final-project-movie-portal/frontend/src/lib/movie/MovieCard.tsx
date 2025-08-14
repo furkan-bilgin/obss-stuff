@@ -4,6 +4,7 @@ import { MovieProps } from './MovieProps';
 import { Link } from 'react-router-dom';
 import { IoIosArrowForward } from 'react-icons/io';
 import { BiCalendar } from 'react-icons/bi';
+import { MovieCategory } from './MovieCategory';
 
 export const MovieCard = ({ movie }: { movie: MovieDto }) => (
   <div className="card bg-base-100 w-90 shadow-sm">
@@ -17,17 +18,7 @@ export const MovieCard = ({ movie }: { movie: MovieDto }) => (
       </div>
       <div className="flex flex-wrap gap-1">
         {movie.categories?.map((category) => (
-          <Link
-            key={category.id}
-            className={`badge badge-outline cursor-click ${
-              window.location.pathname.endsWith(`/search/${category.name}`)
-                ? 'text-warning'
-                : ''
-            }`}
-            to={`/user/search/${category.name}`}
-          >
-            {category.name}
-          </Link>
+          <MovieCategory key={category.id} category={category} />
         ))}
       </div>
       <div className="flex flex-wrap gap-1">

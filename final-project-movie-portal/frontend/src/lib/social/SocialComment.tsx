@@ -1,10 +1,10 @@
 import { BiComment, BiTrash, BiUser } from 'react-icons/bi';
-import type { CommentDto, MovieDto } from '../../../client';
-import { useUserStore } from '../../../state/user';
-import { api } from '../../../api';
 import { SocialCommentForm } from './SocialCommentForm';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useUserStore } from '../../state/user';
+import type { CommentDto, MovieDto } from '../../client';
+import { api } from '../../api';
 
 export const SocialComment = ({
   movie,

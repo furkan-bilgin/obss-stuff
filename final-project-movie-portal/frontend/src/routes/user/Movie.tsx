@@ -13,11 +13,12 @@ import {
 } from 'react-icons/md';
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import { useUserStore } from '../../state/user';
-import { MovieProps } from '../../lib/user/MovieProps';
+import { MovieProps } from '../../lib/movie/MovieProps';
 import { LoadingSpinner } from '../../lib/LoadingSpinner';
 import { ErrorMessage } from '../../lib/ErrorMessage';
-import { SocialComment } from '../../lib/user/social/SocialComment';
-import { SocialCommentForm } from '../../lib/user/social/SocialCommentForm';
+import { SocialComment } from '../../lib/social/SocialComment';
+import { SocialCommentForm } from '../../lib/social/SocialCommentForm';
+import { MovieCategory } from '../../lib/movie/MovieCategory';
 
 export const Movie = () => {
   const { id } = useParams<{ id: string }>();
@@ -71,9 +72,7 @@ export const Movie = () => {
           </div>
           <div className="flex flex-wrap gap-2 my-2">
             {movie.categories?.map((category) => (
-              <div key={category.id} className="badge badge-outline">
-                {category.name}
-              </div>
+              <MovieCategory key={category.id} category={category} />
             ))}
           </div>
           <p className="text-lg text-base-content/80">{movie.description}</p>

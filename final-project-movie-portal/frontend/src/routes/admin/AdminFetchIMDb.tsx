@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MovieCard } from '../../lib/user/MovieCard';
+import { MovieCard } from '../../lib/movie/MovieCard';
 import type { MovieDto } from '../../client';
 import { api } from '../../api';
 import { ErrorMessage } from '../../lib/ErrorMessage';
