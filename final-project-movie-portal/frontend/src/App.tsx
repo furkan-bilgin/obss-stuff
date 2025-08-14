@@ -9,7 +9,7 @@ import {
 import './App.css';
 import { Login } from './routes/Login';
 import { ProtectedRoute } from './lib/ProtectedRoute';
-import { Header } from './lib/Header';
+import { Header } from './lib/header/Header';
 import { Movie } from './routes/user/Movie';
 import { Home } from './routes/user/Home';
 import { Profile } from './routes/user/Profile';
@@ -22,6 +22,7 @@ import { AdminUser } from './routes/admin/AdminUser';
 import { api } from './api';
 import { AdminFetchIMDb } from './routes/admin/AdminFetchIMDb';
 import { Register } from './routes/Register';
+import { Search } from './routes/user/Search';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,6 +44,7 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path="movie/:id" element={<Movie />} />
         <Route path="profile/:username" element={<Profile />} />
+        <Route path="search/:query" element={<Search />} />
       </Route>
       <Route
         path="admin"

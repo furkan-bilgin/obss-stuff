@@ -5,6 +5,7 @@ import {
   deleteMovie,
   getAllMovies,
   getMovieById,
+  searchMovies,
   updateMovie,
 } from '../../client/sdk.gen';
 
@@ -14,6 +15,7 @@ export interface MovieService {
   create: (entity: MovieDto) => Promise<void>;
   update: (id: number, entity: MovieDto) => Promise<void>;
   delete: (id: number) => Promise<void>;
+  search: (name: string) => Promise<MovieDto[]>;
 }
 
 export const movieService = {
@@ -42,5 +44,12 @@ export const movieService = {
   },
   delete: async (id: number) => {
     await deleteMovie({ path: { id }, client: api.client });
+  },
+  search: async (query: string) => {
+    const res = await searchMovies({
+      query: { query },
+      client: api.client,
+    });
+    return res.data;
   },
 } as MovieService;

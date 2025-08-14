@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { useMatch } from 'react-router-dom';
-import { Header } from '../../lib/Header';
+import { Header } from '../header/Header';
 import type { IconType } from 'react-icons';
 import React from 'react';
 import {

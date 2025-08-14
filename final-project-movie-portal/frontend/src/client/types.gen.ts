@@ -661,6 +661,24 @@ export type GetAllRolesResponses = {
 
 export type GetAllRolesResponse = GetAllRolesResponses[keyof GetAllRolesResponses];
 
+export type SearchMoviesData = {
+    body?: never;
+    path?: never;
+    query: {
+        query: string;
+    };
+    url: '/movies/search';
+};
+
+export type SearchMoviesResponses = {
+    /**
+     * OK
+     */
+    200: Array<MovieDto>;
+};
+
+export type SearchMoviesResponse = SearchMoviesResponses[keyof SearchMoviesResponses];
+
 export type DeleteCommentData = {
     body: UserDeleteCommentDto;
     path?: never;
