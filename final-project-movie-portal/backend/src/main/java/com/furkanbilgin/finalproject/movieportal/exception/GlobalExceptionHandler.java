@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
@@ -44,6 +45,10 @@ public class GlobalExceptionHandler {
       status = HttpStatus.CONFLICT;
     } else if (ex instanceof JwtException) {
       status = HttpStatus.UNAUTHORIZED;
+    } else if (ex instanceof DataIntegrityViolationException) {
+      if (ex.getMessage().contains("Duplicate entry")) {
+        status = HttpStatus.CONFLICT;
+      }
     }
 
     var error = new HashMap<String, String>();

@@ -22,7 +22,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 public class User extends BaseEntity implements UserDetails {
   private String username;
+
   private String password;
+
+  @Column(unique = true)
   private String email;
 
   @ManyToMany(fetch = FetchType.EAGER)
