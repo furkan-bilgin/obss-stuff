@@ -3,6 +3,7 @@ import { api } from '../api';
 import { Link, useNavigate } from 'react-router-dom';
 import { ErrorMessage } from '../lib/ErrorMessage';
 import { useUserStore } from '../state/user';
+import { getAPIErrorStatus } from '../api/utils';
 
 export const Login = () => {
   const [username, setEmail] = useState('');
@@ -20,6 +21,12 @@ export const Login = () => {
     } catch (err) {
       if (err instanceof Error) {
         setError(err);
+        const status = getAPIErrorStatus(err);
+        if (status === 401) {
+          setError(new Error('Invalid username or password.'));
+        } else if (status === 409) {
+          setError(new Error('Username already exists.'));
+        }
       }
     } finally {
       setLoading(false);
@@ -62,7 +69,11 @@ export const Login = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-full">
+          <button
+            type="submit"
+            className="btn btn-primary w-full"
+            disabled={loading}
+          >
             {loading ? (
               <>
                 <span className="loading loading-spinner"></span>
