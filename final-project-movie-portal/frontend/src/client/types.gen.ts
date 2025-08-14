@@ -49,6 +49,19 @@ export type FetchTitlesResponseDto = {
     titles?: Array<MovieDto>;
 };
 
+export type UserCommentDto = {
+    parentCommentId?: number;
+    content: string;
+};
+
+export type CommentDto = {
+    id?: number;
+    user?: UserDto;
+    children?: Array<CommentDto>;
+    content?: string;
+    createdAt?: string;
+};
+
 export type RegisterRequestDto = {
     username: string;
     email: string;
@@ -90,6 +103,10 @@ export type UserUnwatchlistMovieDto = {
 
 export type UserUnfavoriteMovieDto = {
     movieId: number;
+};
+
+export type UserDeleteCommentDto = {
+    commentId: number;
 };
 
 export type DeleteUserData = {
@@ -440,6 +457,42 @@ export type CreateDirectorResponses = {
 
 export type CreateDirectorResponse = CreateDirectorResponses[keyof CreateDirectorResponses];
 
+export type GetCommentsByMovieData = {
+    body?: never;
+    path: {
+        movieId: number;
+    };
+    query?: never;
+    url: '/comments/movie/{movieId}';
+};
+
+export type GetCommentsByMovieResponses = {
+    /**
+     * OK
+     */
+    200: Array<CommentDto>;
+};
+
+export type GetCommentsByMovieResponse = GetCommentsByMovieResponses[keyof GetCommentsByMovieResponses];
+
+export type AddCommentData = {
+    body: UserCommentDto;
+    path: {
+        movieId: number;
+    };
+    query?: never;
+    url: '/comments/movie/{movieId}';
+};
+
+export type AddCommentResponses = {
+    /**
+     * OK
+     */
+    200: CommentDto;
+};
+
+export type AddCommentResponse = AddCommentResponses[keyof AddCommentResponses];
+
 export type GetAllCategoriesData = {
     body?: never;
     path?: never;
@@ -607,6 +660,20 @@ export type GetAllRolesResponses = {
 };
 
 export type GetAllRolesResponse = GetAllRolesResponses[keyof GetAllRolesResponses];
+
+export type DeleteCommentData = {
+    body: UserDeleteCommentDto;
+    path?: never;
+    query?: never;
+    url: '/comments/';
+};
+
+export type DeleteCommentResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
 
 export type ClientOptions = {
     baseURL: 'http://127.0.0.1:8080' | (string & {});

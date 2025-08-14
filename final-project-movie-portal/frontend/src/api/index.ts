@@ -5,6 +5,7 @@ import {
   categoryService,
   type CategoryService,
 } from './services/categoryService';
+import { commentService, type CommentService } from './services/commentService';
 import {
   directorService,
   type DirectorService,
@@ -20,6 +21,7 @@ interface APIClientInterface {
   movieService: MovieService;
   userService: UserService;
   imdbService: IMDBService;
+  commentService: CommentService;
 
   init: () => void;
   login: (username: string, password: string) => Promise<void>;
@@ -45,12 +47,14 @@ export const api: APIClientInterface = {
   movieService: movieService,
   userService: userService,
   imdbService: imdbService,
+  commentService: commentService,
   init: () => {
     api.setClientToken(useUserStore.getState().token);
     api.refreshUser();
   },
   login: async (username: string, password: string) => {
     try {
+      api.logout();
       const loginResult = await restClient.login({
         client: api.client,
         body: { username, password },
