@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreRemove;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -27,7 +28,8 @@ public class Movie extends BaseEntity {
       inverseJoinColumns = @JoinColumn(name = "director_id"))
   private Director director;
 
-  @ManyToMany(cascade = {CascadeType.ALL})
+  @ManyToMany(
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   @JoinTable(
       name = "movie_categories",
       joinColumns = @JoinColumn(name = "movie_id"),
@@ -41,4 +43,14 @@ public class Movie extends BaseEntity {
   @Column private Float metacriticRating;
   @Column private Float imdbRating;
   @Column private Integer runtime; // in minutes
+
+  @PreRemove
+  private void removeMovieFromAssociations() {
+    if (director != null) {
+      director.getMovies().remove(this);
+    }
+    for (var category : new ArrayList<>(categories)) {
+      category.getMovies().remove(this);
+    }
+  }
 }
