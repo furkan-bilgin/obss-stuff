@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import * as restClient from '../client';
 import { createClient, createConfig, type Client } from '../client/client';
 import { useUserStore } from '../state/user';
@@ -46,6 +47,18 @@ export const api: APIClientInterface = {
   init: () => {
     api.authService.setClientToken(useUserStore.getState().token);
     api.refreshUser();
+    api.client.instance.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (error.status === 401 && useUserStore.getState().token) {
+          api.authService.logout();
+          window.location.href = '/login';
+        }
+        return Promise.reject(error);
+      }
+    );
   },
   refreshUser: async () => {
     // Get user profile
