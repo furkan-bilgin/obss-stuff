@@ -4,6 +4,7 @@ import { api } from '../../api';
 import { MovieCard } from '../../lib/movie/MovieCard';
 import { ErrorMessage } from '../../lib/ErrorMessage';
 import { LoadingSpinner } from '../../lib/LoadingSpinner';
+import { FaRegMeh } from 'react-icons/fa';
 
 export const Home = () => {
   const [error, setError] = useState<Error | null>(null);
@@ -26,7 +27,14 @@ export const Home = () => {
     fetchData();
   }, []);
   if (error) return <ErrorMessage error={error} />;
-  if (loading) return <LoadingSpinner />;
+  if (loading || !movies) return <LoadingSpinner />;
+  if (!movies.length)
+    return (
+      <div className="flex justify-center items-center gap-4 mt-4 text-3xl">
+        <FaRegMeh />
+        <span>No movies found.</span>
+      </div>
+    );
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
