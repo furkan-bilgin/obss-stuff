@@ -63,6 +63,8 @@ public class UserServiceImpl implements UserService {
   public UserDTO saveUser(RegisterRequestDTO registerUserDTO) {
     var user = modelMapper.map(registerUserDTO, User.class);
     user.setPassword(passwordHasher.hashPassword(registerUserDTO.getPassword()));
+    user.setRoles(new ArrayList<>());
+    user.getRoles().add(roleRepository.findByName("USER").orElseThrow());
     user = userRepository.save(user);
     return modelMapper.map(user, UserDTO.class);
   }
