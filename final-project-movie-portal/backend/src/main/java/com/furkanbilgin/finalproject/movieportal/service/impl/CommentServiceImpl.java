@@ -1,4 +1,4 @@
-package com.furkanbilgin.finalproject.movieportal.service;
+package com.furkanbilgin.finalproject.movieportal.service.impl;
 
 import com.furkanbilgin.finalproject.movieportal.dto.social.CommentDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.comment.UserCommentDTO;
@@ -6,9 +6,12 @@ import com.furkanbilgin.finalproject.movieportal.model.social.Comment;
 import com.furkanbilgin.finalproject.movieportal.repository.CommentRepository;
 import com.furkanbilgin.finalproject.movieportal.repository.MovieRepository;
 import com.furkanbilgin.finalproject.movieportal.repository.UserRepository;
+import com.furkanbilgin.finalproject.movieportal.service.CommentService;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,14 +36,21 @@ public class CommentServiceImpl implements CommentService {
   @Override
   public List<CommentDTO> getCommentsByMovie(Long movieId) {
     var comments =
-        commentRepository.findAll().stream()
+        commentRepository.findAll(Sort.by(Direction.DESC, "id")).stream()
             .filter(
                 c ->
                     c.getMovie() != null
                         && c.getMovie().getId().equals(movieId)
                         && c.getParent() == null)
             .toList();
-    return comments.stream().map(comment -> modelMapper.map(comment, CommentDTO.class)).toList();
+    var commentDTOs =
+        comments.stream().map(comment -> modelMapper.map(comment, CommentDTO.class)).toList();
+    for (var commentDTO : commentDTOs) {
+      var children = commentRepository.findAllByParentId(commentDTO.getId());
+      commentDTO.setChildren(
+          children.stream().map(child -> modelMapper.map(child, CommentDTO.class)).toList());
+    }
+    return commentDTOs;
   }
 
   @Override
@@ -63,6 +73,7 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public void deleteComment(Long commentId) {
+    commentRepository.deleteAll(commentRepository.findAllByParentId(commentId));
     commentRepository.deleteById(commentId);
   }
 
