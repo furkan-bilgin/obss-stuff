@@ -46,11 +46,18 @@ public class CommentServiceImpl implements CommentService {
     var commentDTOs =
         comments.stream().map(comment -> modelMapper.map(comment, CommentDTO.class)).toList();
     for (var commentDTO : commentDTOs) {
-      var children = commentRepository.findAllByParentId(commentDTO.getId());
-      commentDTO.setChildren(
-          children.stream().map(child -> modelMapper.map(child, CommentDTO.class)).toList());
+      setCommentDTOChildren(commentDTO);
     }
     return commentDTOs;
+  }
+
+  private void setCommentDTOChildren(CommentDTO commentDTO) {
+    var children = commentRepository.findAllByParentId(commentDTO.getId());
+    commentDTO.setChildren(
+        children.stream().map(child -> modelMapper.map(child, CommentDTO.class)).toList());
+    for (var child : commentDTO.getChildren()) {
+      setCommentDTOChildren(child);
+    }
   }
 
   @Override
@@ -73,7 +80,10 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public void deleteComment(Long commentId) {
-    commentRepository.deleteAll(commentRepository.findAllByParentId(commentId));
+    var children = commentRepository.findAllByParentId(commentId);
+    for (var child : children) {
+      deleteComment(child.getId());
+    }
     commentRepository.deleteById(commentId);
   }
 

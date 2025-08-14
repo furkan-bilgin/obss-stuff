@@ -3,7 +3,6 @@ package com.furkanbilgin.finalproject.movieportal.model.social;
 import com.furkanbilgin.finalproject.movieportal.model.BaseEntity;
 import com.furkanbilgin.finalproject.movieportal.model.movie.Movie;
 import com.furkanbilgin.finalproject.movieportal.model.user.User;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -16,7 +15,7 @@ import lombok.Setter;
 public class Comment extends BaseEntity {
   @ManyToOne private User user;
 
-  @ManyToOne(cascade = {CascadeType.ALL})
+  @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
   private Comment parent;
 
   @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
