@@ -38,7 +38,7 @@ public class MovieServiceImpl implements MovieService {
   @Override
   @Transactional
   public MovieDTO saveMovieFromIMDBTitleDTO(TitleDTO titleDTO) {
-    var dbMovie = movieRepository.findByName(titleDTO.getPrimaryTitle());
+    var dbMovie = movieRepository.findByTitle(titleDTO.getPrimaryTitle());
     var movie = dbMovie.orElseGet(Movie::new);
 
     movie.setTitle(titleDTO.getPrimaryTitle());
@@ -130,6 +130,13 @@ public class MovieServiceImpl implements MovieService {
               Movie updatedMovie = movieRepository.save(existingMovie);
               return modelMapper.map(updatedMovie, MovieDTO.class);
             });
+  }
+
+  @Override
+  public List<MovieDTO> searchMovies(String query) {
+    return movieRepository.searchByTitle(query).stream()
+        .map(movie -> modelMapper.map(movie, MovieDTO.class))
+        .collect(Collectors.toList());
   }
 
   private void updateMovieRelations(Movie movie, MovieDTO movieDTO) {

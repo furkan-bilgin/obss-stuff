@@ -55,4 +55,10 @@ public class MovieController {
   public void deleteMovie(@PathVariable Long id) {
     movieService.deleteMovieById(id);
   }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<MovieDTO>> searchMovies(@RequestParam String query) {
+    var movies = movieService.searchMovies(query);
+    return ResponseEntity.ok(movies);
+  }
 }
