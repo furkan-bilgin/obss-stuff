@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { FaXmark } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 export const HeaderSearch = () => {
   const [search, setSearch] = useState('');
   const [isSearch, setIsSearch] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -15,6 +16,11 @@ export const HeaderSearch = () => {
     setSearch('');
     setIsSearch(false);
   };
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearch]);
   return (
     <>
       {isSearch && (
@@ -26,8 +32,14 @@ export const HeaderSearch = () => {
             navigate('/user/search/' + search);
             handleClear();
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              handleClear();
+            }
+          }}
         >
           <input
+            ref={searchInputRef}
             type="text"
             placeholder="Search for movies..."
             className="input input-bordered "
