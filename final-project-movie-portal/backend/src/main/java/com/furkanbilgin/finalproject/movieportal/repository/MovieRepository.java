@@ -12,6 +12,9 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
   @Query("SELECT m FROM Movie m WHERE m.title = ?1")
   Optional<Movie> findByTitle(String title);
 
-  @Query("SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', ?1, '%'))")
-  List<Movie> searchByTitle(String title);
+  @Query(
+      "SELECT DISTINCT m FROM Movie m LEFT JOIN m.categories c "
+          + "WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', ?1, '%'))"
+          + "OR LOWER(c.name) LIKE LOWER(CONCAT('%', ?1, '%'))")
+  List<Movie> search(String title);
 }

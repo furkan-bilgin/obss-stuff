@@ -134,7 +134,7 @@ public class MovieServiceImpl implements MovieService {
 
   @Override
   public List<MovieDTO> searchMovies(String query) {
-    return movieRepository.searchByTitle(query).stream()
+    return movieRepository.search(query).stream()
         .map(movie -> modelMapper.map(movie, MovieDTO.class))
         .collect(Collectors.toList());
   }
