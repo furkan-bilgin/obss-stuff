@@ -6,7 +6,6 @@ import { useUserStore } from '../../state/user';
 import { api } from '../../api/index';
 import React from 'react';
 import type { IconType } from 'react-icons';
-import { BiSearch } from 'react-icons/bi';
 import { HeaderSearch } from './HeaderSearch';
 
 const NavbarLink = ({

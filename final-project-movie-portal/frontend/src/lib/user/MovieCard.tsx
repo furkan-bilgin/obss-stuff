@@ -35,10 +35,7 @@ export const MovieCard = ({ movie }: { movie: MovieDto }) => (
           {movie.releaseDate}
         </div>
       </div>
-      <p>
-        {movie.description?.substring(0, 150)}
-        {movie.description?.length ?? 0 > 150 ? '...' : ''}
-      </p>
+      <p>{movie.description}</p>
       <div className="card-actions justify-end">
         <Link to={`/user/movie/${movie.id}`} className="btn btn-sm btn-primary">
           <IoIosArrowForward />

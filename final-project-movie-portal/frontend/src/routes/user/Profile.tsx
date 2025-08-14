@@ -69,18 +69,18 @@ export const Profile = () => {
       }
     };
     fetchData();
-  }, []);
+  });
 
   if (error) return <ErrorMessage error={error} />;
   if (loading || !user) return <LoadingSpinner />;
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-3xl mb-6 flex items-center gap-2">
+    <div className="flex flex-col w-full">
+      <h2 className="text-3xl mb-6 flex items-center justify-center gap-2">
         <FaUser />
         {user.username}'s Profile
       </h2>
-      <div className="space-y-12 flex items-center m-12 mt-0 flex-col">
+      <div className="space-y-12 flex m-12 mt-0 flex-col items-start">
         <MovieListContainer
           title="Favorite Movies"
           icon={IoHeart}
