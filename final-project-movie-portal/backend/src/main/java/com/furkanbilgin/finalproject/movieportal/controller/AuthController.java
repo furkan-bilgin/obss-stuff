@@ -44,7 +44,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginUserDTO) {
+  public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginUserDTO) {
     try {
       var auth =
           authenticationManager.authenticate(
@@ -64,7 +64,7 @@ public class AuthController {
 
   @PostMapping("/register")
   public ResponseEntity<RegisterResponseDTO> register(
-      @RequestBody RegisterRequestDTO registerUserDTO) {
+      @Valid @RequestBody RegisterRequestDTO registerUserDTO) {
     if (userService.findUserByUsername(registerUserDTO.getUsername()).isPresent()) {
       throw new UserAlreadyExistsException("Username already exists");
     }
