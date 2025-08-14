@@ -11,7 +11,7 @@ export type UserState = {
 
 export const useUserStore = create<UserState>()(
   persist(
-    (set) => ({
+    (): UserState => ({
       user: null,
       token: null,
       watchlist: null,
