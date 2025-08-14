@@ -47,14 +47,12 @@ export const SocialComment = ({
                 <BiTrash />
               </button>
             )}
-            {!isChild && (
-              <button
-                className="btn btn-sm text-xl btn-primary"
-                onClick={() => setCommentFormOpen(!commentFormOpen)}
-              >
-                <BiComment />
-              </button>
-            )}
+            <button
+              className="btn btn-sm text-xl btn-primary"
+              onClick={() => setCommentFormOpen(!commentFormOpen)}
+            >
+              <BiComment />
+            </button>
           </div>
         </div>
         <p className="text-sm">{comment.content}</p>
@@ -70,16 +68,22 @@ export const SocialComment = ({
         )}
       </div>
       {(comment.children?.length ?? 0) > 0 && (
-        <div className="flex flex-col gap-2 ps-8 pe-2 mb-4">
-          {comment.children?.map((child) => (
-            <SocialComment
-              key={child.id}
-              movie={movie}
-              comment={child}
-              isChild={true}
-              handleCommentDeleted={handleCommentDeleted}
-            />
-          ))}
+        <div
+          className={`flex flex-col gap-2 ms-8 mb-2 border-gray-200  ${
+            !isChild ? 'pe-2' : 'border-s-1'
+          }`}
+        >
+          <div className="ms-4">
+            {comment.children?.map((child) => (
+              <SocialComment
+                key={child.id}
+                movie={movie}
+                comment={child}
+                isChild={true}
+                handleCommentDeleted={handleCommentDeleted}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
