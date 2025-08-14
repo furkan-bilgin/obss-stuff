@@ -1,3 +1,5 @@
+import type { AxiosError } from 'axios';
+
 export function getAPIErrorStatus(error: Error): number | undefined {
   if (error instanceof Error) {
     // @ts-expect-error err WILL have a status property at runtime
@@ -28,9 +30,12 @@ export function getAPIError(
   const status = getAPIErrorStatus(error);
   errorResponse = { ...defaultErrorResponse, ...errorResponse };
   if (status === 400) {
-    // @ts-expect-error err WILL have a response property at runtime
-    const errorData = error.data as Record<string, string>;
-    return new Error(Object.values(errorData).join(', '));
+    const axiosError = error as AxiosError;
+    const errorData = axiosError.response?.data;
+    if (errorData && typeof errorData === 'object') {
+      return new Error(Object.values(errorData).join(', '));
+    }
+    return new Error('Bad Request');
   } else if (status === 401) {
     return new Error(errorResponse.unauthorized);
   } else if (status === 409) {
