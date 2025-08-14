@@ -4,6 +4,7 @@ import { useUserStore } from '../../../state/user';
 import { api } from '../../../api';
 import { SocialCommentForm } from './SocialCommentForm';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export const SocialComment = ({
   movie,
@@ -33,13 +34,19 @@ export const SocialComment = ({
         <div className="flex justify-between">
           <div className="flex items-center gap-1">
             <BiUser size={20} />
-            <h2 className="card-title text-2xl">{comment.user?.username}</h2>
+            <Link
+              className="card-title text-2xl cursor-pointer underline"
+              to={`/user/profile/${comment.user?.username}`}
+            >
+              {comment.user?.username}
+            </Link>
           </div>
           <div className="flex gap-2 items-center">
             <span className="text-sm text-gray-500">
               {new Date(comment.createdAt ?? '').toLocaleString('tr-TR')}
             </span>
-            {comment.user?.id === userData.user?.id && (
+            {(comment.user?.id === userData.user?.id ||
+              userData.user?.roles?.some((role) => role.name === 'ADMIN')) && (
               <button
                 className="btn btn-sm text-xl btn-error"
                 onClick={handleDelete}
