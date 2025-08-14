@@ -28,7 +28,11 @@ export const Settings = () => {
       setSuccess('Settings updated successfully.');
       setPassword('');
     } catch (err) {
-      setError(getAPIError(err));
+      setError(
+        getAPIError(err, {
+          conflict: 'Email already exists',
+        })
+      );
     } finally {
       setLoading(false);
     }
