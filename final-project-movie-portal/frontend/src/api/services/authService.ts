@@ -10,7 +10,8 @@ export interface AuthService {
     email: string
   ) => Promise<void>;
   logout: () => void;
-  setClientToken: (token: string | null) => void;
+  setClientAccessToken: (token: string | null) => void;
+  refreshAccessToken: () => Promise<void>;
 }
 
 export const authService = {
@@ -20,15 +21,16 @@ export const authService = {
         client: api.client,
         body: { username, password },
       });
-      const token = loginResult.data?.token;
-      if (!token) {
+      const refreshToken = loginResult.data?.refreshToken;
+      if (!refreshToken) {
         return;
       }
-      useUserStore.setState({ token });
-      authService.setClientToken(token);
+      useUserStore.setState({ refreshToken: refreshToken });
+      // get access token using our refresh token
+      await authService.refreshAccessToken();
       await api.refreshUser();
     } catch (error) {
-      useUserStore.setState({ user: null, token: null });
+      authService.logout();
       console.error('Login failed:', error);
       throw error;
     }
@@ -41,24 +43,39 @@ export const authService = {
       });
       await authService.login(username, password);
     } catch (error) {
-      useUserStore.setState({ user: null, token: null });
+      authService.logout();
       console.error('Register failed:', error);
       throw error;
     }
   },
   logout: () => {
-    useUserStore.setState({ user: null, token: null });
-    authService.setClientToken(null);
+    useUserStore.setState({
+      user: null,
+      refreshToken: null,
+      accessToken: null,
+    });
+    authService.setClientAccessToken(null);
   },
-  setClientToken: (token: string | null) => {
-    if (!token) {
-      return;
-    }
+  setClientAccessToken: (token: string | null) => {
     api.client.setConfig({
       ...api.client.getConfig(),
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {
+            Authorization: null,
+          },
     });
+  },
+  refreshAccessToken: async () => {
+    // Should have no access token before trying to refresh
+    authService.setClientAccessToken(null);
+    const token = await restClient.refreshAccessToken({
+      client: api.client,
+      body: { refreshToken: useUserStore.getState().refreshToken ?? '' },
+    });
+    useUserStore.setState({ accessToken: token.data?.accessToken });
+    authService.setClientAccessToken(token.data?.accessToken ?? null);
   },
 };

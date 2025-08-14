@@ -4,7 +4,8 @@ import { persist } from 'zustand/middleware';
 
 export type UserState = {
   user: UserDto | null;
-  token: string | null;
+  refreshToken: string | null;
+  accessToken: string | null;
   watchlist: MovieDto[] | null;
   favorites: MovieDto[] | null;
 };
@@ -13,7 +14,8 @@ export const useUserStore = create<UserState>()(
   persist(
     (): UserState => ({
       user: null,
-      token: null,
+      refreshToken: null,
+      accessToken: null,
       watchlist: null,
       favorites: null,
     }),

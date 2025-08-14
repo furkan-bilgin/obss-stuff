@@ -7,7 +7,7 @@ import { LoadingSpinner } from '../../lib/LoadingSpinner';
 
 export const Home = () => {
   const [error, setError] = useState<Error | null>(null);
-  const [movies, setMovies] = useState<MovieDto[]>([]);
+  const [movies, setMovies] = useState<MovieDto[] | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
@@ -30,9 +30,8 @@ export const Home = () => {
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} />
-      ))}
+      {Array.isArray(movies) &&
+        movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
     </div>
   );
 };

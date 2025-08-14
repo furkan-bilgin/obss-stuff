@@ -78,7 +78,15 @@ export type LoginRequestDto = {
 };
 
 export type LoginResponseDto = {
-    token?: string;
+    refreshToken?: string;
+};
+
+export type RefreshAccessTokenRequestDto = {
+    refreshToken?: string;
+};
+
+export type RefreshAccessTokenResponseDto = {
+    accessToken?: string;
 };
 
 export type UserMovieWatchlistResponseDto = {
@@ -558,6 +566,22 @@ export type LoginResponses = {
 };
 
 export type LoginResponse = LoginResponses[keyof LoginResponses];
+
+export type RefreshAccessTokenData = {
+    body: RefreshAccessTokenRequestDto;
+    path?: never;
+    query?: never;
+    url: '/auth/access-token/refresh';
+};
+
+export type RefreshAccessTokenResponses = {
+    /**
+     * OK
+     */
+    200: RefreshAccessTokenResponseDto;
+};
+
+export type RefreshAccessTokenResponse = RefreshAccessTokenResponses[keyof RefreshAccessTokenResponses];
 
 export type GetUserByUsernameData = {
     body?: never;

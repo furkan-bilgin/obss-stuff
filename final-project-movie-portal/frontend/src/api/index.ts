@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import * as restClient from '../client';
 import { createClient, createConfig, type Client } from '../client/client';
 import { useUserStore } from '../state/user';
@@ -45,20 +44,43 @@ export const api: APIClientInterface = {
   commentService: commentService,
   authService: authService,
   init: () => {
-    api.authService.setClientToken(useUserStore.getState().token);
-    api.refreshUser();
+    api.authService.setClientAccessToken(useUserStore.getState().accessToken);
     api.client.instance.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      (error) => {
-        if (error.status === 401 && useUserStore.getState().token) {
+      (response) => response,
+      async (error) => {
+        const redirectToLogin = () => {
           api.authService.logout();
-          window.location.href = '/login';
+          //window.location.href = '/login';
+          return Promise.reject(error);
+        };
+        if (error.config.url === '/auth/access-token/refresh') {
+          return redirectToLogin();
         }
-        return Promise.reject(error);
+        if (!useUserStore.getState().refreshToken) {
+          return Promise.reject(error);
+        }
+        const originalRequest = error.config;
+        // Only process 401 and no retry
+        if (!(error.response.status === 401 && !originalRequest._retry))
+          return Promise.reject(error);
+        originalRequest._retry = true;
+
+        try {
+          await api.authService.refreshAccessToken();
+          // TODO: Could be prettier
+          originalRequest.headers.Authorization = `Bearer ${
+            useUserStore.getState().accessToken
+          }`;
+          return api.client.instance(originalRequest);
+        } catch (err) {
+          console.error('Refresh access token failed:', err);
+          return redirectToLogin();
+        }
       }
     );
+    if (useUserStore.getState().user) {
+      api.refreshUser();
+    }
   },
   refreshUser: async () => {
     // Get user profile
