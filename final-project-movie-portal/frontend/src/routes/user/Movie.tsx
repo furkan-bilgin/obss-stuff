@@ -166,9 +166,10 @@ export const Movie = () => {
           setComments(await fetchComments());
         }}
       />
+      <hr className="my-4 border-gray-600" />
       {comments && (
-        <div className="mb-4">
-          <h2 className="text-xl font-bold mb-2">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-2">
             {comments
               ? comments.length +
                 comments.reduce(
