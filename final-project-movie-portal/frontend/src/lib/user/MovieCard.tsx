@@ -30,6 +30,12 @@ export const MovieCard = ({ movie }: { movie: MovieDto }) => (
           <FaStar />
           {movie.imdbRating}
         </div>
+        {movie.metacriticRating && (
+          <div className="badge badge-outline badge-secondary">
+            <FaStar />
+            {movie.metacriticRating}
+          </div>
+        )}
         <div className="badge badge-outline badge-primary">
           <BiCalendar />
           {movie.releaseDate}

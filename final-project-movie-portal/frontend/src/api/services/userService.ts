@@ -54,24 +54,28 @@ export const userService = {
       client: api.client,
       body: { movieId: id },
     });
+    await api.refreshUser();
   },
   unfavoriteMovie: async (id: number) => {
     await unfavoriteMovie({
       client: api.client,
       body: { movieId: id },
     });
+    await api.refreshUser();
   },
   addMovieToWatchlist: async (id: number) => {
     await addToWatchlist({
       client: api.client,
       body: { movieId: id },
     });
+    await api.refreshUser();
   },
   removeMovieFromWatchlist: async (id: number) => {
     await removeFromWatchlist({
       client: api.client,
       body: { movieId: id },
     });
+    await api.refreshUser();
   },
   getByUsername: async (username: string) => {
     const res = await getUserByUsername({

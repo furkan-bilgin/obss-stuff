@@ -108,6 +108,7 @@ export const Movie = () => {
             </div>
             {movie.metacriticRating && (
               <div className="badge badge-lg badge-info gap-2 p-4">
+                <FaStar />
                 Metacritic: {movie.metacriticRating}
               </div>
             )}
@@ -116,12 +117,11 @@ export const Movie = () => {
             {userData.watchlist?.find((watch) => watch.id === movie.id) ? (
               <button
                 className="btn btn-outline btn-primary"
-                onClick={async () => {
+                onClick={async () =>
                   await api.userService.removeMovieFromWatchlist(
                     movie.id as number
-                  );
-                  await api.refreshUser();
-                }}
+                  )
+                }
               >
                 <MdOutlinePlaylistRemove />
                 Remove from Watchlist
@@ -129,10 +129,9 @@ export const Movie = () => {
             ) : (
               <button
                 className="btn btn-primary"
-                onClick={async () => {
-                  await api.userService.addMovieToWatchlist(movie.id as number);
-                  await api.refreshUser();
-                }}
+                onClick={async () =>
+                  await api.userService.addMovieToWatchlist(movie.id as number)
+                }
               >
                 <MdOutlinePlaylistAdd />
                 Add to Watchlist
@@ -141,10 +140,9 @@ export const Movie = () => {
             {userData.favorites?.find((fav) => fav?.id === movie.id) ? (
               <button
                 className="btn btn-outline btn-secondary"
-                onClick={async () => {
-                  await api.userService.unfavoriteMovie(movie.id as number);
-                  await api.refreshUser();
-                }}
+                onClick={async () =>
+                  api.userService.unfavoriteMovie(movie.id as number)
+                }
               >
                 <IoHeart size={20} />
                 Remove from Favorites
@@ -152,10 +150,9 @@ export const Movie = () => {
             ) : (
               <button
                 className="btn btn-secondary"
-                onClick={async () => {
-                  await api.userService.favoriteMovie(movie.id as number);
-                  await api.refreshUser();
-                }}
+                onClick={async () =>
+                  await api.userService.favoriteMovie(movie.id as number)
+                }
               >
                 <IoHeartOutline size={20} />
                 Add to Favorites
