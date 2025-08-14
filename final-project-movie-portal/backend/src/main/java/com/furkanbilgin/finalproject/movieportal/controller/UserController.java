@@ -3,6 +3,7 @@ package com.furkanbilgin.finalproject.movieportal.controller;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieFavoriteResponseDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieWatchlistResponseDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserUpdateMeDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.favorite.UserFavoriteMovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.favorite.UserUnfavoriteMovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.watchlist.UserUnwatchlistMovieDTO;
@@ -94,6 +95,12 @@ public class UserController {
   @GetMapping("/me")
   public ResponseEntity<UserDTO> getMe() {
     return ResponseEntity.ok(currentUserProvider.getCurrentUser());
+  }
+
+  @PutMapping("/me")
+  public ResponseEntity<UserDTO> updateMe(@Valid @RequestBody UserUpdateMeDTO userUpdateMeDTO) {
+    var currentUser = currentUserProvider.getCurrentUser();
+    return returnUserResponse(userService.updateUser(currentUser.getId(), userUpdateMeDTO));
   }
 
   @PutMapping("/movie/favorite")

@@ -3,6 +3,7 @@ package com.furkanbilgin.finalproject.movieportal.service;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieFavoriteResponseDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieWatchlistResponseDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserUpdateMeDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,8 @@ public interface UserService {
   Optional<UserDTO> findUserByUsername(String username);
 
   Optional<UserDTO> updateUser(Long id, UserDTO userDTO);
+
+  Optional<UserDTO> updateUser(Long id, UserUpdateMeDTO userUpdateMeDTO);
 
   Optional<UserMovieFavoriteResponseDTO> getUserMovieFavorites(Long id);
 

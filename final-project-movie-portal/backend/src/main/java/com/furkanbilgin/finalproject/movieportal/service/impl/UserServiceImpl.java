@@ -5,6 +5,7 @@ import com.furkanbilgin.finalproject.movieportal.dto.movie.MovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieFavoriteResponseDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.UserMovieWatchlistResponseDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.UserUpdateMeDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
 import com.furkanbilgin.finalproject.movieportal.model.movie.Movie;
 import com.furkanbilgin.finalproject.movieportal.model.user.User;
@@ -115,6 +116,20 @@ public class UserServiceImpl implements UserService {
       return Optional.of(modelMapper.map(userRepository.save(user), UserDTO.class));
     }
     return Optional.empty();
+  }
+
+  @Override
+  public Optional<UserDTO> updateUser(Long id, UserUpdateMeDTO userUpdateMeDTO) {
+    var userOpt = userRepository.findById(id);
+    if (userOpt.isEmpty()) {
+      return Optional.empty();
+    }
+    var user = userOpt.get();
+    user.setEmail(userUpdateMeDTO.getEmail());
+    if (userUpdateMeDTO.getPassword() != null) {
+      user.setPassword(passwordHasher.hashPassword(userUpdateMeDTO.getPassword()));
+    }
+    return Optional.of(modelMapper.map(userRepository.save(user), UserDTO.class));
   }
 
   @Override
