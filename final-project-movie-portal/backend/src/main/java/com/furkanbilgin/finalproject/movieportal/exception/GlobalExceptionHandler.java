@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,15 +28,23 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<Map<String, String>> handleGeneralExceptions(Exception ex) {
-    var error = new HashMap<String, String>();
-    error.put("error", ex.getMessage());
+  public ResponseEntity<Map<String, String>> handleAllExceptions(Exception ex) {
     var status = HttpStatus.INTERNAL_SERVER_ERROR;
-
     var responseStatusAnnotation = ex.getClass().getAnnotation(ResponseStatus.class);
     if (responseStatusAnnotation != null) {
       status = responseStatusAnnotation.value();
+    } else if (ex instanceof InvalidCredentialsException
+        || ex instanceof AuthorizationDeniedException
+        || ex instanceof UsernameNotFoundException) {
+      status = HttpStatus.UNAUTHORIZED;
+    } else if (ex instanceof UserNotFoundException) {
+      status = HttpStatus.NOT_FOUND;
+    } else if (ex instanceof UserAlreadyExistsException) {
+      status = HttpStatus.CONFLICT;
     }
+
+    var error = new HashMap<String, String>();
+    error.put("error", ex.getMessage());
     logger.error("Exception occurred: ", ex);
     return new ResponseEntity<>(error, status);
   }
