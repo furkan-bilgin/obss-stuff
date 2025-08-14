@@ -69,7 +69,7 @@ export const Profile = () => {
       }
     };
     fetchData();
-  });
+  }, []);
 
   if (error) return <ErrorMessage error={error} />;
   if (loading || !user) return <LoadingSpinner />;
