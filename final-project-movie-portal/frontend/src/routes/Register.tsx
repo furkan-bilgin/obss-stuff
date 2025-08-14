@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { api } from '../api';
 import { Link, useNavigate } from 'react-router-dom';
 import { ErrorMessage } from '../lib/ErrorMessage';
-import { getAPIErrorStatus } from '../api/utils';
+import { getAPIError } from '../api/utils';
 
 export const Register = () => {
   const [username, setUsername] = useState('');
@@ -20,11 +20,12 @@ export const Register = () => {
       navigate('/user');
     } catch (err) {
       if (err instanceof Error) {
-        setError(err);
-        const status = getAPIErrorStatus(err);
-        if (status === 409) {
-          setError(new Error('Username already exists.'));
-        }
+        setError(
+          getAPIError(err, {
+            unauthorized: 'Invalid username or password.',
+            conflict: 'Username already exists.',
+          })
+        );
       }
     } finally {
       setLoading(false);

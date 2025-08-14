@@ -3,6 +3,7 @@ import { useUserStore } from '../../state/user';
 import { api } from '../../api';
 import { ErrorMessage } from '../../lib/ErrorMessage';
 import { LoadingSpinner } from '../../lib/LoadingSpinner';
+import { getAPIError } from '../../api/utils';
 
 export const Settings = () => {
   const user = useUserStore((state) => state.user);
@@ -27,7 +28,7 @@ export const Settings = () => {
       setSuccess('Settings updated successfully.');
       setPassword('');
     } catch (err) {
-      if (err instanceof Error) setError(err);
+      setError(getAPIError(err));
     } finally {
       setLoading(false);
     }
@@ -57,7 +58,6 @@ export const Settings = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Leave blank to keep your current password"
-            minLength={6}
           />
         </label>
         <button type="submit" className="btn btn-primary" disabled={loading}>
