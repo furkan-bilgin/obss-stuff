@@ -23,6 +23,7 @@ import { api } from './api';
 import { AdminFetchIMDb } from './routes/admin/AdminFetchIMDb';
 import { Register } from './routes/Register';
 import { Search } from './routes/user/Search';
+import { Settings } from './routes/user/Settings';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,6 +46,7 @@ const router = createBrowserRouter(
         <Route path="movie/:id" element={<Movie />} />
         <Route path="profile/:username" element={<Profile />} />
         <Route path="search/:query" element={<Search />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       <Route
         path="admin"

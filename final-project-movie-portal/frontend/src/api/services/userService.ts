@@ -11,13 +11,15 @@ import {
   getUserWatchlist,
   removeFromWatchlist,
   unfavoriteMovie,
+  updateMe,
   updateUser,
 } from '../../client/sdk.gen';
 import { api } from '..';
-import type { MovieDto, RoleDto, UserDto } from '../../client';
+import type { MovieDto, RoleDto, UserDto, UserUpdateMeDto } from '../../client';
 
 export interface UserService {
   getMe: () => Promise<UserDto>;
+  updateMe: (entity: UserUpdateMeDto) => Promise<void>;
   getAll: () => Promise<UserDto[]>;
   getById: (id: number) => Promise<UserDto>;
   update: (id: number, entity: UserDto) => Promise<void>;
@@ -36,6 +38,9 @@ export const userService = {
   getMe: async () => {
     const res = await getMe({ client: api.client });
     return res.data;
+  },
+  updateMe: async (entity: UserUpdateMeDto) => {
+    await updateMe({ body: entity, client: api.client });
   },
   getAll: async () => {
     const res = await getAllUsers({ client: api.client });

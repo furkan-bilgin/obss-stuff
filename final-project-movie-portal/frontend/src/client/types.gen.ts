@@ -20,6 +20,11 @@ export type UserFavoriteMovieDto = {
     movieId: number;
 };
 
+export type UserUpdateMeDto = {
+    email?: string;
+    password?: string;
+};
+
 export type CategoryDto = {
     id?: number;
     name?: string;
@@ -226,6 +231,38 @@ export type FavoriteMovieResponses = {
      */
     200: unknown;
 };
+
+export type GetMeData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/users/me';
+};
+
+export type GetMeResponses = {
+    /**
+     * OK
+     */
+    200: UserDto;
+};
+
+export type GetMeResponse = GetMeResponses[keyof GetMeResponses];
+
+export type UpdateMeData = {
+    body: UserUpdateMeDto;
+    path?: never;
+    query?: never;
+    url: '/users/me';
+};
+
+export type UpdateMeResponses = {
+    /**
+     * OK
+     */
+    200: UserDto;
+};
+
+export type UpdateMeResponse = UpdateMeResponses[keyof UpdateMeResponses];
 
 export type DeleteMovieData = {
     body?: never;
@@ -636,22 +673,6 @@ export type GetUserFavoritesResponses = {
 };
 
 export type GetUserFavoritesResponse = GetUserFavoritesResponses[keyof GetUserFavoritesResponses];
-
-export type GetMeData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/users/me';
-};
-
-export type GetMeResponses = {
-    /**
-     * OK
-     */
-    200: UserDto;
-};
-
-export type GetMeResponse = GetMeResponses[keyof GetMeResponses];
 
 export type GetAllUsersData = {
     body?: never;
