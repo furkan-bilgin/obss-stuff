@@ -45,6 +45,7 @@ export interface CRUDConfig<T extends Entity> {
   tableColumns: {
     header: string;
     render: (entity: T) => React.ReactNode;
+    className?: string;
   }[];
   canCreate?: boolean;
 }
@@ -88,7 +89,9 @@ const GenericList = <T extends Entity>({
       <thead>
         <tr>
           {config.tableColumns.map((col) => (
-            <th key={col.header}>{col.header}</th>
+            <th key={col.header} className={col.className}>
+              {col.header}
+            </th>
           ))}
           <th>Actions</th>
         </tr>

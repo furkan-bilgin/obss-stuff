@@ -2,6 +2,7 @@ import { FaStar } from 'react-icons/fa';
 import type { MovieDto } from '../../client/types.gen';
 import { GenericCRUD, type CRUDConfig } from '../../lib/admin/GenericCRUD';
 import { api } from '../../api';
+import { MovieCategory } from '../../lib/movie/MovieCategory';
 
 const movieConfig: CRUDConfig<MovieDto> = {
   entityName: 'Movie',
@@ -34,6 +35,12 @@ const movieConfig: CRUDConfig<MovieDto> = {
       type: 'dropdown',
       dataFetcher: api.directorService.getAll,
     },
+    {
+      name: 'categories',
+      label: 'Categories',
+      type: 'multiselect',
+      dataFetcher: api.categoryService.getAll,
+    },
     { name: 'releaseDate', label: 'Release Date', type: 'text' },
     { name: 'language', label: 'Language', type: 'text' },
     { name: 'country', label: 'Country', type: 'text' },
@@ -44,7 +51,18 @@ const movieConfig: CRUDConfig<MovieDto> = {
   ],
   tableColumns: [
     { header: 'Title', render: (movie) => movie.title },
-    { header: 'Director', render: (movie) => movie.director?.name },
+    { header: 'Director', render: (movie) => movie.director?.name ?? 'N/A' },
+    {
+      header: 'Categories',
+      render: (movie) => (
+        <div className="flex flex-wrap gap-1">
+          {movie.categories?.map((category) => (
+            <MovieCategory key={category.id} category={category} />
+          ))}
+        </div>
+      ),
+      className: 'w-1/4',
+    },
     { header: 'Release Date', render: (movie) => movie.releaseDate },
     {
       header: 'Poster URL',

@@ -66,9 +66,7 @@ export const AdminBaseTemplate = (props: PropsWithChildren) => {
   );
 
   return (
-    <div
-      className={'drawer ' + (window.innerWidth >= 1024 ? 'drawer-open' : '')}
-    >
+    <div className="drawer drawer-open">
       <input id="admin-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
