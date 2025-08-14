@@ -118,33 +118,41 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserMovieFavoriteResponseDTO getUserMovieFavorites(Long id) {
-    var user = findUserByIdOrThrow(id);
+  public Optional<UserMovieFavoriteResponseDTO> getUserMovieFavorites(Long id) {
+    var user = userRepository.findById(id);
+    if (user.isEmpty()) {
+      return Optional.empty();
+    }
     // TODO: n+1?
     // TODO: add pagination
     var favorites =
-        user.getFavorites().stream()
+        user.get().getFavorites().stream()
             .map(favorite -> modelMapper.map(favorite.getMovie(), MovieDTO.class))
             .toList();
-    return new UserMovieFavoriteResponseDTO(modelMapper.map(user, UserDTO.class), favorites);
+    return Optional.of(
+        new UserMovieFavoriteResponseDTO(modelMapper.map(user, UserDTO.class), favorites));
   }
 
   @Override
-  public UserMovieWatchlistResponseDTO getUserWatchlist(Long id) {
-    var user = findUserByIdOrThrow(id);
+  public Optional<UserMovieWatchlistResponseDTO> getUserWatchlist(Long id) {
+    var user = userRepository.findById(id);
+    if (user.isEmpty()) {
+      return Optional.empty();
+    }
     // TODO: n+1?
     // TODO: add pagination
     var watchlist =
-        user.getWatchlist().stream()
+        user.get().getWatchlist().stream()
             .map(watchlistItem -> modelMapper.map(watchlistItem.getMovie(), MovieDTO.class))
             .toList();
-    return new UserMovieWatchlistResponseDTO(modelMapper.map(user, UserDTO.class), watchlist);
+    return Optional.of(
+        new UserMovieWatchlistResponseDTO(modelMapper.map(user, UserDTO.class), watchlist));
   }
 
   @Override
-  public String updateUserToken(Long id) {
+  public Optional<String> getUserAccessToken(Long id) {
     var user = this.findUserById(id);
-    return user.map(userDTO -> jwtService.generate(userDTO.getUsername(), jwtTtl)).orElse(null);
+    return user.map(userDTO -> jwtService.generate(userDTO.getUsername(), jwtTtl));
   }
 
   public Optional<UserDTO> deleteUser(Long id) {

@@ -18,11 +18,11 @@ public interface UserService {
 
   Optional<UserDTO> updateUser(Long id, UserDTO userDTO);
 
-  UserMovieFavoriteResponseDTO getUserMovieFavorites(Long id);
+  Optional<UserMovieFavoriteResponseDTO> getUserMovieFavorites(Long id);
 
-  UserMovieWatchlistResponseDTO getUserWatchlist(Long id);
+  Optional<UserMovieWatchlistResponseDTO> getUserWatchlist(Long id);
 
-  String updateUserToken(Long id);
+  Optional<String> getUserAccessToken(Long id);
 
   Optional<UserDTO> deleteUser(Long id);
 

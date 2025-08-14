@@ -2,12 +2,17 @@ package com.furkanbilgin.finalproject.movieportal.controller;
 
 import com.furkanbilgin.finalproject.movieportal.dto.user.login.LoginRequestDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.login.LoginResponseDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.refreshToken.RefreshAccessTokenRequestDTO;
+import com.furkanbilgin.finalproject.movieportal.dto.user.refreshToken.RefreshAccessTokenResponseDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterRequestDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.register.RegisterResponseDTO;
 import com.furkanbilgin.finalproject.movieportal.exception.InvalidCredentialsException;
 import com.furkanbilgin.finalproject.movieportal.exception.UserAlreadyExistsException;
 import com.furkanbilgin.finalproject.movieportal.exception.UserNotFoundException;
+import com.furkanbilgin.finalproject.movieportal.security.CurrentUserProvider;
+import com.furkanbilgin.finalproject.movieportal.service.RefreshTokenService;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,10 +29,18 @@ public class AuthController {
 
   private final AuthenticationManager authenticationManager;
   private final UserService userService;
+  private final RefreshTokenService refreshTokenService;
+  private final CurrentUserProvider currentUserProvider;
 
-  public AuthController(AuthenticationManager authenticationManager, UserService userService) {
+  public AuthController(
+      AuthenticationManager authenticationManager,
+      UserService userService,
+      RefreshTokenService refreshTokenService,
+      CurrentUserProvider currentUserProvider) {
     this.authenticationManager = authenticationManager;
     this.userService = userService;
+    this.refreshTokenService = refreshTokenService;
+    this.currentUserProvider = currentUserProvider;
   }
 
   @PostMapping("/login")
@@ -42,8 +55,8 @@ public class AuthController {
       if (user.isEmpty()) {
         throw new UserNotFoundException("User not found");
       }
-      var token = userService.updateUserToken(user.get().getId());
-      return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(token));
+      var refreshToken = refreshTokenService.generateRefreshToken(user.get().getId());
+      return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(refreshToken));
     } catch (Exception e) {
       throw new InvalidCredentialsException("Invalid username or password");
     }
@@ -57,5 +70,19 @@ public class AuthController {
     }
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(new RegisterResponseDTO(userService.saveUser(registerUserDTO)));
+  }
+
+  @PostMapping("/access-token/refresh")
+  public ResponseEntity<RefreshAccessTokenResponseDTO> refreshAccessToken(
+      @Valid @RequestBody RefreshAccessTokenRequestDTO request) {
+    var refreshToken = refreshTokenService.getUserFromRefreshToken(request.getRefreshToken());
+    if (refreshToken.isEmpty()) {
+      throw new InvalidCredentialsException("Invalid refresh token");
+    }
+    var newAccessToken = userService.getUserAccessToken(refreshToken.get().getId());
+    if (newAccessToken.isEmpty()) {
+      throw new InvalidCredentialsException("Failed to generate new access token");
+    }
+    return ResponseEntity.ok(new RefreshAccessTokenResponseDTO(newAccessToken.get()));
   }
 }

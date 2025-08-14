@@ -1,5 +1,6 @@
 package com.furkanbilgin.finalproject.movieportal.exception;
 
+import io.jsonwebtoken.JwtException;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -41,6 +42,8 @@ public class GlobalExceptionHandler {
       status = HttpStatus.NOT_FOUND;
     } else if (ex instanceof UserAlreadyExistsException) {
       status = HttpStatus.CONFLICT;
+    } else if (ex instanceof JwtException) {
+      status = HttpStatus.UNAUTHORIZED;
     }
 
     var error = new HashMap<String, String>();

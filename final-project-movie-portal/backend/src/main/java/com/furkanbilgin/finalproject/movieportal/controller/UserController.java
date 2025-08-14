@@ -8,15 +8,14 @@ import com.furkanbilgin.finalproject.movieportal.dto.user.favorite.UserUnfavorit
 import com.furkanbilgin.finalproject.movieportal.dto.user.watchlist.UserUnwatchlistMovieDTO;
 import com.furkanbilgin.finalproject.movieportal.dto.user.watchlist.UserWatchlistMovieDTO;
 import com.furkanbilgin.finalproject.movieportal.exception.UserNotFoundException;
+import com.furkanbilgin.finalproject.movieportal.security.CurrentUserProvider;
 import com.furkanbilgin.finalproject.movieportal.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
   private final UserService userService;
+  private final CurrentUserProvider currentUserProvider;
 
   @Autowired
-  public UserController(UserService userService) {
+  public UserController(UserService userService, CurrentUserProvider currentUserProvider) {
     this.userService = userService;
+    this.currentUserProvider = currentUserProvider;
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
@@ -58,7 +59,10 @@ public class UserController {
     if (user.isEmpty()) {
       throw new UserNotFoundException("User not found");
     }
-    return ResponseEntity.ok(userService.getUserWatchlist(user.get().getId()));
+    return userService
+        .getUserWatchlist(user.get().getId())
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @GetMapping("/username/{username}/favorites")
@@ -68,7 +72,10 @@ public class UserController {
     if (user.isEmpty()) {
       throw new UserNotFoundException("User not found");
     }
-    return ResponseEntity.ok(userService.getUserMovieFavorites(user.get().getId()));
+    return userService
+        .getUserMovieFavorites(user.get().getId())
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
@@ -86,45 +93,32 @@ public class UserController {
 
   @GetMapping("/me")
   public ResponseEntity<UserDTO> getMe() {
-    String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    return returnUserResponse(userService.findUserByUsername(username));
+    return ResponseEntity.ok(currentUserProvider.getCurrentUser());
   }
 
   @PutMapping("/movie/favorite")
   public void favoriteMovie(@Valid @RequestBody UserFavoriteMovieDTO userFavoriteMovieDTO) {
-    userService.favoriteMovie(getCurrentUser().getId(), userFavoriteMovieDTO.getMovieId());
+    userService.favoriteMovie(
+        currentUserProvider.getCurrentUser().getId(), userFavoriteMovieDTO.getMovieId());
   }
 
   @DeleteMapping("/movie/favorite")
   public void unfavoriteMovie(@Valid @RequestBody UserUnfavoriteMovieDTO userUnfavoriteMovieDTO) {
-    userService.unfavoriteMovie(getCurrentUser().getId(), userUnfavoriteMovieDTO.getMovieId());
+    userService.unfavoriteMovie(
+        currentUserProvider.getCurrentUser().getId(), userUnfavoriteMovieDTO.getMovieId());
   }
 
   @PutMapping("/movie/watchlist")
   public void addToWatchlist(@Valid @RequestBody UserWatchlistMovieDTO userWatchlistMovieDTO) {
-    userService.addMovieToWatchlist(getCurrentUser().getId(), userWatchlistMovieDTO.getMovieId());
+    userService.addMovieToWatchlist(
+        currentUserProvider.getCurrentUser().getId(), userWatchlistMovieDTO.getMovieId());
   }
 
   @DeleteMapping("/movie/watchlist")
   public void removeFromWatchlist(
       @Valid @RequestBody UserUnwatchlistMovieDTO userUnwatchlistMovieDTO) {
     userService.removeMovieFromWatchlist(
-        getCurrentUser().getId(), userUnwatchlistMovieDTO.getMovieId());
-  }
-
-  private UserDTO getCurrentUser() {
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
-    // Probably don't even need this because security filter handles this
-    // before it even reaches us, but well...
-    if (authentication == null || !authentication.isAuthenticated()) {
-      throw new AccessDeniedException("Not authorized");
-    }
-    var username = authentication.getName();
-    var user = userService.findUserByUsername(username);
-    if (user.isEmpty()) {
-      throw new AccessDeniedException("User not found");
-    }
-    return user.get();
+        currentUserProvider.getCurrentUser().getId(), userUnwatchlistMovieDTO.getMovieId());
   }
 
   private ResponseEntity<UserDTO> returnUserResponse(Optional<UserDTO> userDTO) {
