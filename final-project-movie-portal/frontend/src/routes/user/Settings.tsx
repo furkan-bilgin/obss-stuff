@@ -41,6 +41,15 @@ export const Settings = () => {
       <h2 className="text-2xl font-bold mb-4">Account Settings</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label className="form-control">
+          <span className="label-text">Username</span>
+          <input
+            type="text"
+            className="input input-bordered w-full"
+            value={user.username}
+            disabled
+          />
+        </label>
+        <label className="form-control">
           <span className="label-text">Email</span>
           <input
             type="email"
