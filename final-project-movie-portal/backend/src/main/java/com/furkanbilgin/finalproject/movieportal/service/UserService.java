@@ -17,6 +17,8 @@ public interface UserService {
 
   Optional<UserDTO> findUserByUsername(String username);
 
+  Optional<UserDTO> findUserByEmail(String email);
+
   Optional<UserDTO> updateUser(Long id, UserDTO userDTO);
 
   Optional<UserDTO> updateUser(Long id, UserUpdateMeDTO userUpdateMeDTO);

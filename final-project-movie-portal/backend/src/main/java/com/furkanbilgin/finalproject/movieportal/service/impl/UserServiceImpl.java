@@ -91,6 +91,11 @@ public class UserServiceImpl implements UserService {
         .map(user -> modelMapper.map(user, UserDTO.class));
   }
 
+  @Override
+  public Optional<UserDTO> findUserByEmail(String email) {
+    return userRepository.findByEmail(email).map(user -> modelMapper.map(user, UserDTO.class));
+  }
+
   public Optional<UserDTO> updateUser(Long id, UserDTO userDTO) {
     var userOpt = userRepository.findById(id);
     if (userOpt.isPresent()) {

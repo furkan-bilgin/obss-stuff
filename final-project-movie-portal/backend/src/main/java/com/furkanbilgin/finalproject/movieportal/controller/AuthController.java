@@ -68,6 +68,10 @@ public class AuthController {
     if (userService.findUserByUsername(registerUserDTO.getUsername()).isPresent()) {
       throw new UserAlreadyExistsException("Username already exists");
     }
+    // TODO: would be better with UNIQUE constraint
+    if (userService.findUserByEmail(registerUserDTO.getEmail()).isPresent()) {
+      throw new UserAlreadyExistsException("Email already exists");
+    }
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(new RegisterResponseDTO(userService.saveUser(registerUserDTO)));
   }
