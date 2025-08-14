@@ -17,9 +17,13 @@ export const MovieCard = ({ movie }: { movie: MovieDto }) => (
       </div>
       <div className="flex flex-wrap gap-1">
         {movie.categories?.map((category) => (
-          <div key={category.id} className="badge badge-outline">
+          <Link
+            key={category.id}
+            className="badge badge-outline cursor-click"
+            to={`/user/search/${category.name}`}
+          >
             {category.name}
-          </div>
+          </Link>
         ))}
       </div>
       <div className="flex flex-wrap gap-1">
