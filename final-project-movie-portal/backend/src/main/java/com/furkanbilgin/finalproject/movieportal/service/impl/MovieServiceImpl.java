@@ -127,7 +127,7 @@ public class MovieServiceImpl implements MovieService {
             existingMovie -> {
               modelMapper.map(movieDTO, existingMovie);
               updateMovieRelations(existingMovie, movieDTO);
-              Movie updatedMovie = movieRepository.save(existingMovie);
+              var updatedMovie = movieRepository.save(existingMovie);
               return modelMapper.map(updatedMovie, MovieDTO.class);
             });
   }
@@ -158,8 +158,9 @@ public class MovieServiceImpl implements MovieService {
                       categoryRepository
                           .findById(cat.getId())
                           .orElseThrow(() -> new RuntimeException("Category not found")))
-              .collect(Collectors.toList());
-      movie.setCategories(categories);
+              .toList();
+      movie.getCategories().clear();
+      movie.getCategories().addAll(categories);
     }
   }
 }
