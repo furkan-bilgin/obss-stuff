@@ -2,12 +2,11 @@ package com.furkanbilgin.finalproject.movieportal.model.user;
 
 import com.furkanbilgin.finalproject.movieportal.model.BaseEntity;
 import com.furkanbilgin.finalproject.movieportal.model.Role;
+import com.furkanbilgin.finalproject.movieportal.model.social.Comment;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +44,13 @@ public class User extends BaseEntity implements UserDetails {
       orphanRemoval = true,
       fetch = FetchType.LAZY)
   private List<UserMovieWatchlist> watchlist = new ArrayList<>();
+
+  @OneToMany(
+      mappedBy = "user",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.LAZY)
+  private List<Comment> comments = new ArrayList<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -65,6 +65,10 @@ public class UserServiceImpl implements UserService {
     user.setPassword(passwordHasher.hashPassword(registerUserDTO.getPassword()));
     user.setRoles(new ArrayList<>());
     user.getRoles().add(roleRepository.findByName("USER").orElseThrow());
+    // If this is the first user, give them the ADMIN role
+    if (userRepository.findAll().isEmpty()) {
+      user.getRoles().add(roleRepository.findByName("ADMIN").orElseThrow());
+    }
     user = userRepository.save(user);
     return modelMapper.map(user, UserDTO.class);
   }
