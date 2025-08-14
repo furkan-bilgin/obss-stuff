@@ -19,7 +19,11 @@ export const MovieCard = ({ movie }: { movie: MovieDto }) => (
         {movie.categories?.map((category) => (
           <Link
             key={category.id}
-            className="badge badge-outline cursor-click"
+            className={`badge badge-outline cursor-click ${
+              window.location.pathname.endsWith(`/search/${category.name}`)
+                ? 'text-warning'
+                : ''
+            }`}
             to={`/user/search/${category.name}`}
           >
             {category.name}
