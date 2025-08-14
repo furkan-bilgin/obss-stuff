@@ -16,7 +16,7 @@ export const Login = () => {
 
     try {
       setLoading(true);
-      await api.login(username, password);
+      await api.authService.login(username, password);
       navigate('/user');
     } catch (err) {
       if (err instanceof Error) {

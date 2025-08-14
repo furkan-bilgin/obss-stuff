@@ -16,7 +16,7 @@ export const Register = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await api.register(username, password, email);
+      await api.authService.register(username, password, email);
       navigate('/user');
     } catch (err) {
       if (err instanceof Error) {

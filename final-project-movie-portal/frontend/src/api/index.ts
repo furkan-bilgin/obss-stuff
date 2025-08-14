@@ -1,6 +1,7 @@
 import * as restClient from '../client';
 import { createClient, createConfig, type Client } from '../client/client';
 import { useUserStore } from '../state/user';
+import { authService, type AuthService } from './services/authService';
 import {
   categoryService,
   type CategoryService,
@@ -22,16 +23,9 @@ interface APIClientInterface {
   userService: UserService;
   imdbService: IMDBService;
   commentService: CommentService;
+  authService: AuthService;
 
   init: () => void;
-  login: (username: string, password: string) => Promise<void>;
-  register: (
-    username: string,
-    password: string,
-    email: string
-  ) => Promise<void>;
-  logout: () => void;
-  setClientToken: (token: string | null) => void;
   refreshUser: () => Promise<void>;
 }
 
@@ -48,70 +42,25 @@ export const api: APIClientInterface = {
   userService: userService,
   imdbService: imdbService,
   commentService: commentService,
+  authService: authService,
   init: () => {
-    api.setClientToken(useUserStore.getState().token);
+    api.authService.setClientToken(useUserStore.getState().token);
     api.refreshUser();
-  },
-  login: async (username: string, password: string) => {
-    try {
-      api.logout();
-      const loginResult = await restClient.login({
-        client: api.client,
-        body: { username, password },
-      });
-      const token = loginResult.data?.token;
-      if (!token) {
-        return;
-      }
-      useUserStore.setState({ token });
-      api.setClientToken(token);
-      await api.refreshUser();
-    } catch (error) {
-      useUserStore.setState({ user: null, token: null });
-      console.error('Login failed:', error);
-      throw error;
-    }
-  },
-  register: async (username: string, password: string, email: string) => {
-    try {
-      await restClient.register({
-        client: api.client,
-        body: { username, password, email },
-      });
-      await api.login(username, password);
-    } catch (error) {
-      useUserStore.setState({ user: null, token: null });
-      console.error('Register failed:', error);
-      throw error;
-    }
-  },
-  logout: () => {
-    useUserStore.setState({ user: null, token: null });
-    api.setClientToken(null);
-  },
-  setClientToken: (token: string | null) => {
-    if (!token) {
-      return;
-    }
-    api.client.setConfig({
-      ...api.client.getConfig(),
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
   },
   refreshUser: async () => {
     // Get user profile
-    const me = await restClient.getMe({ client: api.client });
-    useUserStore.setState({ user: me.data });
+    const me = await userService.getMe();
+    useUserStore.setState({ user: me });
+
     // Get user watchlist
-    const username = useUserStore.getState().user?.username ?? '';
+    const username = me.username ?? '';
     const watchlistRes = await restClient.getUserWatchlist({
       client: api.client,
       path: { username },
     });
     useUserStore.setState({ watchlist: watchlistRes.data?.watchlist });
 
+    // Get user favorites
     const favoritesRes = await restClient.getUserFavorites({
       client: api.client,
       path: { username },

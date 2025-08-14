@@ -83,7 +83,7 @@ export const Header = () => {
               <li>
                 <a
                   onClick={() => {
-                    api.logout();
+                    api.authService.logout();
                     navigate('/login');
                   }}
                 >
