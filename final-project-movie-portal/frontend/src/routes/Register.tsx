@@ -23,7 +23,7 @@ export const Register = () => {
         setError(
           getAPIError(err, {
             unauthorized: 'Invalid username or password.',
-            conflict: 'Username already exists.',
+            conflict: 'Username or Email already exists.',
           })
         );
       }
